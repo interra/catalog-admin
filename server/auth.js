@@ -43,10 +43,19 @@ internals.applyStrategy = function (server, next) {
 
                     results.user.hydrateRoles(done);
                 }],
+                /**
+                 * Pretty sure this is where the roles gets applied to scope.
+                 */
                 scope: ['user', function (results, done) {
 
                     if (!results.user || !results.user.roles) {
                         return done();
+                    }
+
+                    // This is a hack to give logged in users the "user" role for auth scope.
+                    // This already exists implicitly so maybe don't need it.
+                    if (!results.user.roles.admin) {
+                      results.user.roles.user = true;
                     }
 
                     done(null, Object.keys(results.user.roles));
@@ -85,7 +94,7 @@ internals.preware = {
             reply();
         }
     },
-    ensureAdminGroup: function (groups) {
+      ensureAdminGroup: function (groups) {
 
         return {
             assign: 'ensureAdminGroup',

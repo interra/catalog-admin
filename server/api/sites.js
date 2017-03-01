@@ -20,7 +20,7 @@ internals.applyRoutes = function (server, next) {
         config: {
             auth: {
                 strategy: 'session',
-                scope: 'admin'
+                scope: ['admin']
             },
             validate: {
                 query: {
@@ -90,13 +90,14 @@ internals.applyRoutes = function (server, next) {
         config: {
             auth: {
                 strategy: 'session',
-                scope: 'admin'
+                scope: ['admin','account']
             },
             validate: {
                 payload: {
                     _id: Joi.string().required(),
                     name: Joi.string().required(),
-                    description: Joi.string().required()
+                    description: Joi.string().required(),
+                    users: Joi.array().items()
                 }
             }
         },
@@ -104,6 +105,7 @@ internals.applyRoutes = function (server, next) {
 
             const name = request.payload.name;
             const description = request.payload.description;
+            const users = request.payload.users;
 
             const query = { '_id': request.payload._id };
 
@@ -112,7 +114,7 @@ internals.applyRoutes = function (server, next) {
                 return reply(Boom.conflict('_id already exists.'));
               }
               else {
-                Site.create(request.payload._id, name, description, (err, site) => {
+                Site.create(request.payload._id, name, description, users, (err, site) => {
 
                     if (err) {
                         return reply(err);
@@ -126,18 +128,21 @@ internals.applyRoutes = function (server, next) {
         }
     });
 
-
+    // TODO: Only let users change sites they own.
     server.route({
         method: 'PUT',
         path: '/sites/{id}',
         config: {
             auth: {
                 strategy: 'session',
-                scope: 'admin'
+                scope: ['admin', 'account']
             },
             validate: {
                 payload: {
-                  name: Joi.string().required()
+                    _id: Joi.string().required(),
+                    name: Joi.string().required(),
+                    description: Joi.string().required(),
+                    users: Joi.array().items()
                 }
             }
         },
@@ -147,7 +152,8 @@ internals.applyRoutes = function (server, next) {
             const update = {
                 $set: {
                     name: request.payload.name,
-                    description: request.payload.description
+                    description: request.payload.description,
+                    users: request.payload.users
                 }
             };
 
@@ -168,25 +174,25 @@ internals.applyRoutes = function (server, next) {
         }
     });
 
-
+    // TODO: Only let users change sites they own.
     server.route({
         method: 'PUT',
-        path: '/sites/{id}/user',
+        path: '/sites/{id}/users',
         config: {
             auth: {
                 strategy: 'session',
-                scope: 'admin'
+                scope: ['admin','account']
             },
             validate: {
                 payload: {
-                    username: Joi.string().lowercase().required()
+                    users: Joi.array().items()
                 }
             },
             pre: [{
                 assign: 'site',
                 method: function (request, reply) {
-
-                    Site.findById(request.params.id, (err, site) => {
+                  const query = { '_id': request.params.id };
+                    Site.findOne(query, (err, site) => {
 
                         if (err) {
                             return reply(err);
@@ -207,16 +213,16 @@ internals.applyRoutes = function (server, next) {
                 site: function (done) {
 
                     const id = request.params.id;
+                    const users = request.payload.users
                     const update = {
                         $set: {
-                            user: {
-                                id: request.pre.user._id.toString(),
-                                name: request.pre.user.username
-                            }
+                            users
                         }
                     };
 
-                    Site.findByIdAndUpdate(id, update, done);
+                    const query = {"_id": id};
+
+                    Site.findOneAndUpdate(query, update, done);
                 }
             }, (err, results) => {
 
@@ -229,77 +235,21 @@ internals.applyRoutes = function (server, next) {
         }
     });
 
-
-    server.route({
-        method: 'DELETE',
-        path: '/sites/{id}/user',
-        config: {
-            auth: {
-                strategy: 'session',
-                scope: 'admin'
-            },
-            pre: [{
-                assign: 'site',
-                method: function (request, reply) {
-
-                    Site.findById(request.params.id, (err, site) => {
-
-                        if (err) {
-                            return reply(err);
-                        }
-
-                        if (!site) {
-                            return reply(Boom.notFound('Document not found.'));
-                        }
-
-                        reply(site);
-                    });
-                }
-            }]
-        },
-        handler: function (request, reply) {
-
-            Async.auto({
-                site: function (done) {
-
-                    const id = request.params.id;
-                    const update = {
-                        $unset: {
-                            user: undefined
-                        }
-                    };
-
-                    Site.findByIdAndUpdate(id, update, done);
-                }
-            }, (err, results) => {
-
-                if (err) {
-                    return reply(err);
-                }
-
-                reply(results.site);
-            });
-        }
-    });
-
-
+    // TODO: Only let users change sites they own.
     server.route({
         method: 'DELETE',
         path: '/sites/{id}',
         config: {
             auth: {
                 strategy: 'session',
-                scope: 'admin'
-            },
-            pre: [
-                AuthPlugin.preware.ensureAdminGroup('root')
-            ]
+                scope: ['admin', 'account']
+            }
         },
         handler: function (request, reply) {
 
             const query = { '_id': request.params.id };
 
-            Site.findByIdAndDelete(query, (err, site) => {
+            Site.findOnedAndDelete(query, (err, site) => {
 
                 if (err) {
                     return reply(err);

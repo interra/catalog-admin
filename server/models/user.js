@@ -182,6 +182,7 @@ User.schema = Joi.object().keys({
     username: Joi.string().token().lowercase().required(),
     password: Joi.string(),
     email: Joi.string().email().lowercase().required(),
+    sites: Joi.array().unique(),
     roles: Joi.object().keys({
         admin: Joi.object().keys({
             id: Joi.string().required(),
