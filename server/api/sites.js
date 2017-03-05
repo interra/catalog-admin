@@ -1,6 +1,5 @@
 'use strict';
 const Async = require('async');
-const AuthPlugin = require('../auth');
 const Boom = require('boom');
 const EscapeRegExp = require('escape-string-regexp');
 const Joi = require('joi');
@@ -12,7 +11,6 @@ const internals = {};
 internals.applyRoutes = function (server, next) {
 
     const Site = server.plugins['hapi-mongo-models'].Site;
-    const User = server.plugins['hapi-mongo-models'].User;
 
     server.route({
         method: 'GET',
@@ -20,7 +18,7 @@ internals.applyRoutes = function (server, next) {
         config: {
             auth: {
                 strategy: 'session',
-                scope: ['admin']
+                scope: ['admin','account']
             },
             validate: {
                 query: {
@@ -43,6 +41,11 @@ internals.applyRoutes = function (server, next) {
             const limit = request.query.limit;
             const page = request.query.page;
 
+            // TODO: make sure not admin group.
+            const userId = request.auth.credentials.session.userId;
+
+            query.users = { $in: [userId] };
+
             Site.pagedFind(query, fields, sort, limit, page, (err, results) => {
 
                 if (err) {
@@ -61,7 +64,7 @@ internals.applyRoutes = function (server, next) {
         config: {
             auth: {
                 strategy: 'session',
-                scope: 'admin'
+                scope: ['admin','site-{params.id}']
             }
         },
         handler: function (request, reply) {
@@ -97,7 +100,7 @@ internals.applyRoutes = function (server, next) {
                     _id: Joi.string().required(),
                     name: Joi.string().required(),
                     description: Joi.string().required(),
-                    users: Joi.array().items()
+                    users: Joi.array()
                 }
             }
         },
@@ -110,32 +113,34 @@ internals.applyRoutes = function (server, next) {
             const query = { '_id': request.payload._id };
 
             Site.findOne(query, (err, site) => {
-              if (site) {
-                return reply(Boom.conflict('_id already exists.'));
-              }
-              else {
-                Site.create(request.payload._id, name, description, users, (err, site) => {
+
+                if (site) {
+                    return reply(Boom.conflict('_id already exists.'));
+                }
+
+                if (err) {
+                    return reply(err);
+                }
+
+                Site.create(request.payload._id, name, description, users, (err, result) => {
 
                     if (err) {
                         return reply(err);
                     }
 
-                    reply(site);
+                    reply(result);
                 });
-
-              }
             });
         }
     });
 
-    // TODO: Only let users change sites they own.
     server.route({
         method: 'PUT',
         path: '/sites/{id}',
         config: {
             auth: {
                 strategy: 'session',
-                scope: ['admin', 'account']
+                scope: ['admin','site-{params.id}']
             },
             validate: {
                 payload: {
@@ -174,24 +179,25 @@ internals.applyRoutes = function (server, next) {
         }
     });
 
-    // TODO: Only let users change sites they own.
     server.route({
         method: 'PUT',
         path: '/sites/{id}/users',
         config: {
             auth: {
                 strategy: 'session',
-                scope: ['admin','account']
+                scope: ['admin','site-{params.id}']
             },
             validate: {
                 payload: {
-                    users: Joi.array().items()
+                    users: Joi.array()
                 }
             },
             pre: [{
                 assign: 'site',
                 method: function (request, reply) {
-                  const query = { '_id': request.params.id };
+
+                    const query = { '_id': request.params.id };
+
                     Site.findOne(query, (err, site) => {
 
                         if (err) {
@@ -213,14 +219,14 @@ internals.applyRoutes = function (server, next) {
                 site: function (done) {
 
                     const id = request.params.id;
-                    const users = request.payload.users
+                    const users = request.payload.users;
                     const update = {
                         $set: {
                             users
                         }
                     };
 
-                    const query = {"_id": id};
+                    const query = { '_id': id };
 
                     Site.findOneAndUpdate(query, update, done);
                 }
@@ -242,7 +248,7 @@ internals.applyRoutes = function (server, next) {
         config: {
             auth: {
                 strategy: 'session',
-                scope: ['admin', 'account']
+                scope: ['admin','site-{params.id}']
             }
         },
         handler: function (request, reply) {

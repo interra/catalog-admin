@@ -5,6 +5,7 @@ const Async = require('async');
 const Bcrypt = require('bcrypt');
 const Joi = require('joi');
 const MongoModels = require('mongo-models');
+const Site = require('./site');
 
 
 class User extends MongoModels {
@@ -129,6 +130,35 @@ class User extends MongoModels {
         }
 
         return this.roles.hasOwnProperty(role);
+    }
+
+    hydrateScopes(userId, callback) {
+
+        const self = this;
+        const tasks = {};
+        const query = {};
+        const options = { '_id' : 1 };
+
+        query.users = { $in : [userId] };
+
+        tasks.sites = function (done) {
+
+            Site.find(query, options, done);
+        };
+        Async.auto(tasks, (err, results) => {
+
+            if (err) {
+                return callback(err);
+            }
+            self._sites = [];
+
+            for (const i in results.sites) {
+                self._sites.push(results.sites[i]._id);
+            }
+
+            callback(null, self._sites);
+        });
+
     }
 
     hydrateRoles(callback) {

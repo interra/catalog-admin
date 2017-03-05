@@ -43,10 +43,19 @@ internals.applyStrategy = function (server, next) {
 
                     results.user.hydrateRoles(done);
                 }],
-                /**
-                 * Pretty sure this is where the roles gets applied to scope.
-                 */
-                scope: ['user', function (results, done) {
+                sites: ['user', function (results, done) {
+
+                    if (!results.user) {
+                        return done();
+                    }
+                    if (typeof results.user._id === 'undefined') {
+                        return done();
+                    }
+
+                    results.user.hydrateScopes(results.user._id.toString(), done);
+                }],
+                scope: ['sites', function (results, done) {
+
 
                     if (!results.user || !results.user.roles) {
                         return done();
@@ -55,11 +64,19 @@ internals.applyStrategy = function (server, next) {
                     // This is a hack to give logged in users the "user" role for auth scope.
                     // This already exists implicitly so maybe don't need it.
                     if (!results.user.roles.admin) {
-                      results.user.roles.user = true;
+                        results.user.roles.user = true;
                     }
 
-                    done(null, Object.keys(results.user.roles));
+                    const scopes = Object.keys(results.user.roles);
+
+                    for (const numb in results.user._sites) {
+                        scopes.push('site-' + results.user._sites[numb]);
+                    }
+
+                    done(null, scopes);
                 }]
+
+
             }, (err, results) => {
 
                 if (err) {
@@ -94,7 +111,7 @@ internals.preware = {
             reply();
         }
     },
-      ensureAdminGroup: function (groups) {
+    ensureAdminGroup: function (groups) {
 
         return {
             assign: 'ensureAdminGroup',

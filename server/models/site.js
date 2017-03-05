@@ -1,7 +1,6 @@
 'use strict';
 const Joi = require('joi');
 const MongoModels = require('mongo-models');
-const Slug = require('slug');
 
 class Site extends MongoModels {
     static create(_id, name, description, users, callback) {
@@ -25,19 +24,22 @@ class Site extends MongoModels {
     }
 
     static addUser(_id, user, callback) {
-      const query = { '_id': _id };
-      const update = {
-          $push: {
-            user
-          }
-      };
-      this.updateOne(query, update)
+
+        const query = {};
+        query._id = _id;
+        const update = {
+            $push: {
+                user
+            }
+        };
+        this.updateOne(query, update);
     }
 
     static findByUsername(username, callback) {
-      const query = { 'user.name': username.toLowerCase() };
 
-      this.findMany(query, callback);
+        const query = { 'user.name': username.toLowerCase() };
+
+        this.findMany(query, callback);
 
     }
 }
@@ -49,12 +51,7 @@ Site.schema = Joi.object().keys({
     name: Joi.string().required(),
     description: Joi.string().required(),
     timeCreated: Joi.date().required(),
-    users: Joi.array().items(
-      Joi.object().keys({
-          id: Joi.string().required(),
-          name: Joi.string().lowercase().required()
-      })
-    )
+    users: Joi.array().items().required()
 });
 
 module.exports = Site;
