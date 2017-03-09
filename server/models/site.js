@@ -23,25 +23,6 @@ class Site extends MongoModels {
         });
     }
 
-    static addUser(_id, user, callback) {
-
-        const query = {};
-        query._id = _id;
-        const update = {
-            $push: {
-                user
-            }
-        };
-        this.updateOne(query, update);
-    }
-
-    static findByUsername(username, callback) {
-
-        const query = { 'user.name': username.toLowerCase() };
-
-        this.findMany(query, callback);
-
-    }
 }
 
 Site.collection = 'sites';

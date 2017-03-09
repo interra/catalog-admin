@@ -41,10 +41,11 @@ internals.applyRoutes = function (server, next) {
             const limit = request.query.limit;
             const page = request.query.page;
 
-            // TODO: make sure not admin group.
-            const userId = request.auth.credentials.session.userId;
-
-            query.users = { $in: [userId] };
+            // Admins can see everything.
+            if (!request.auth.credentials.roles && !request.auth.create.roles.admin && !request.auth.credentials.roles.admin.isMemberOf('admin')) {
+                const userId = request.auth.credentials.session.userId;
+                query.users = { $in: [userId] };
+            }
 
             Site.pagedFind(query, fields, sort, limit, page, (err, results) => {
 
@@ -144,7 +145,6 @@ internals.applyRoutes = function (server, next) {
             },
             validate: {
                 payload: {
-                    _id: Joi.string().required(),
                     name: Joi.string().required(),
                     description: Joi.string().required(),
                     users: Joi.array().items()
