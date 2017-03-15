@@ -41,6 +41,7 @@ Gulp.task('webpack', (callback) => {
             admin: './client/pages/admin/index',
             contact: './client/pages/contact/index',
             login: './client/pages/login/index',
+            sites: './client/pages/sites/index',
             signup: './client/pages/signup/index'
         },
         output: {

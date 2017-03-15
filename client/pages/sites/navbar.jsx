@@ -48,10 +48,10 @@ class Navbar extends React.Component {
             <div className="navbar navbar-default navbar-fixed-top">
                 <div className="container">
                     <div className="navbar-header">
-                        <a className="navbar-brand" href="/sites">
+                        <Link className="navbar-brand" to="/sites">
                             <img className="navbar-logo" src="/public/media/interra-leaf.png" />
                             <span className="navbar-brand-label">interra</span>
-                        </a>
+                        </Link>
                         <button
                             className="navbar-toggle collapsed"
                             onClick={this.toggleMenu.bind(this)}>
@@ -64,10 +64,10 @@ class Navbar extends React.Component {
                     <div className={navBarCollapse}>
                         <ul className="nav navbar-nav">
                             <li className={this.isPathActive('/account')}>
-                                <Link to="/account">My account</Link>
+                                <a href="/account">My account</a>
                             </li>
                             <li className={this.isPathActive('/account/settings')}>
-                                <Link to="/account/settings">Settings</Link>
+                                <a href="/account/settings">Settings</a>
                             </li>
                         </ul>
                         <ul className="nav navbar-nav navbar-right">

@@ -1,22 +1,24 @@
 'use strict';
-const DetailsForm = require('./details-form.jsx');
 const Actions = require('./actions');
-const PasswordForm = require('./password-form.jsx');
 const React = require('react');
 const Store = require('./store');
-const UserForm = require('./user-form.jsx');
+const SitesForm = require('./sites-form.jsx');
 
-
-class SettingsPage extends React.Component {
+class CreateSite extends React.Component {
     constructor(props) {
 
         super(props);
 
-        Actions.getDetails();
-        Actions.getUser();
-
-        this.state = Store.getState();
-        console.log("CONSTRUCTOR",this.state);
+        this.state = {};
+        this.state.site = {
+          // We are loading the form from scratch so no data lookup.
+          hydrated: true,
+          loading: false,
+          showSaveSuccess: false,
+          error: undefined,
+          hasError: {},
+          help: {},
+        }
     }
 
     componentDidMount() {
@@ -38,12 +40,10 @@ class SettingsPage extends React.Component {
 
         return (
             <section className="container">
-                <h1 className="page-header">Account settings</h1>
+                <h1 className="page-header">Create Site</h1>
                 <div className="row">
                     <div className="col-sm-6">
-                        <DetailsForm {...this.state.details} />
-                        <UserForm {...this.state.user} />
-                        <PasswordForm {...this.state.password} />
+                        <SitesForm {...this.state.site} />
                     </div>
                 </div>
             </section>
@@ -52,4 +52,4 @@ class SettingsPage extends React.Component {
 }
 
 
-module.exports = SettingsPage;
+module.exports = CreateSite;

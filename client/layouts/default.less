@@ -2,7 +2,10 @@ body {
     padding-top: 50px;
 }
 
-
+h1 {
+  border-bottom: 1px solid #CCC;
+  padding-bottom: 15px;
+}
 .bamf {
     font-size: 20em;
 }
@@ -14,12 +17,13 @@ body {
         color: #333;
         position: relative;
         display: inline-block;
+        padding: 15px 15px 15px 0px;
 
         .navbar-logo {
             position: absolute;
-            top: 10px;
-            height: 32px;
-            width: 32px;
+            top: 17px;
+            width: 27px;
+            left: 3px;
         }
     }
     .navbar-brand-label {
@@ -108,4 +112,18 @@ body {
 /* prevent ios zoom on input */
 select, textarea, input, .form-control {
   font-size: 16px;
+}
+
+.has-success .form-control-success {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Cpath fill='%235cb85c' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3E%3C/svg%3E");
+}
+.form-control-danger, .form-control-success, .form-control-warning {
+    padding-right: 2.25rem;
+    background-repeat: no-repeat;
+    background-position: center right .5625rem;
+    -webkit-background-size: 1.125rem 1.125rem;
+    background-size: 1.125rem 1.125rem;
+}
+.has-success .form-control {
+    border-color: #5cb85c;
 }

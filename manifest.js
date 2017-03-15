@@ -185,6 +185,9 @@ const manifest = {
             plugin: './server/web/public'
         },
         {
+            plugin: './server/web/sites'
+        },
+        {
             plugin: './server/web/signup'
         }
     ]

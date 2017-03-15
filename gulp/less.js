@@ -24,6 +24,10 @@ Gulp.task('less', () => {
         dest: './public/pages',
         outputName: 'account.min.css'
     }, {
+      entries: './client/pages/sites/index.less',
+      dest: './public/pages',
+      outputName: 'sites.min.css'
+    }, {
         entries: './client/pages/admin/index.less',
         dest: './public/pages',
         outputName: 'admin.min.css'
