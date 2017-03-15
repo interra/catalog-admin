@@ -11,8 +11,8 @@ const Sites = (props) => {
     for (var i = 0; i < props.sites.sites.length; i++) {
         var site =  props.sites.sites[i];
         var extras = { };
-        extras.href = '/sites/' + site._id;
-        sites.push(<div key={i} className ="site-row"><a href="/site/"{... extras}><h3 className='title' key={i}>{site.name}</h3></a><div className="desc">{site.description}</div></div>);
+        extras.to = '/sites/' + site._id;
+        sites.push(<div key={i} className ="site-row"><h3 className='title' key={i}><Link to=""{...extras}>{site.name}</Link></h3><div className="desc">{site.description}</div></div>);
     }
     return <div>{sites}</div>;
 }

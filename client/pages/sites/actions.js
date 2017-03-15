@@ -16,6 +16,18 @@ class Actions {
         );
     }
 
+    static getSite(id) {
+
+        ApiActions.get(
+            `/api/sites/${id}`,
+            undefined,
+            Store,
+            Constants.GET_SITE,
+            Constants.GET_SITE_RESPONSE
+        );
+    }
+
+
     static saveSite(data) {
 
         ApiActions.post(
