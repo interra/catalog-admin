@@ -39,6 +39,16 @@ class Actions {
         );
     }
 
+    static updateSite(id, data) {
+
+        ApiActions.put(
+            `/api/sites/${id}`,
+            data,
+            Store,
+            Constants.UPDATE_SITE,
+            Constants.UPDATE_SITE_RESPONSE
+        );
+    }
 
     static hideSitesSaveSuccess() {
 

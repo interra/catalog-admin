@@ -9,6 +9,7 @@ const initialState = {
     loading: false,
     showSaveSuccess: false,
     error: undefined,
+    proc: "edit",
     hasError: {},
     help: {},
     name: "",
@@ -67,7 +68,34 @@ const reducer = function (state = initialState, action) {
         return ObjectAssign({}, state, stateUpdates);
     }
 
+    if (action.type === Constants.UPDATE_SITE) {
 
+        return ObjectAssign({}, state, {
+            loading: true,
+            name: action.request.data.name,
+            slug: action.request.data._id,
+            description: action.request.data.description
+        });
+    }
+
+    if (action.type === Constants.UPDATE_SITE_RESPONSE) {
+      
+        const validation = ParseValidation(action.response);
+        const stateUpdates = {
+            loading: false,
+            showSaveSuccess: !action.err,
+            error: validation.error,
+            hasError: validation.hasError,
+            hydrated: true,
+            help: validation.help
+        };
+
+        if (action.response.hasOwnProperty('name')) {
+            stateUpdates.name = action.response.name;
+        }
+
+        return ObjectAssign({}, state, stateUpdates);
+    }
     if (action.type === Constants.HIDE_SITE_SAVE_SUCCESS) {
         return ObjectAssign({}, state, {
             showSaveSuccess: false

@@ -1,6 +1,7 @@
 'use strict';
 const Sites = require('./reducers/sites-list');
 const Site = require('./reducers/site-form');
+const User = require('./reducers/user');
 
 const Redux = require('redux');
 
@@ -8,6 +9,7 @@ const Redux = require('redux');
 module.exports = Redux.createStore(
     Redux.combineReducers({
         sites: Sites,
-        site: Site
+        site: Site,
+        user: User
     })
 );

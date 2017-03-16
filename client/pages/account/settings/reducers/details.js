@@ -18,7 +18,6 @@ const initialState = {
     }
 };
 const reducer = function (state = initialState, action) {
-    console.log(action.type);
 
     if (action.type === Constants.GET_DETAILS) {
         return ObjectAssign({}, state, {

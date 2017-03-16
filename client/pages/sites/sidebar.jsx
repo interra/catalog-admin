@@ -46,32 +46,29 @@ class Sidebar extends React.Component {
             collapse: !this.state.sidebarOpen
         });
 
+        let dashboardPath = '/sites/' + this.props.id;
+        let editPath = '/sites/' + this.props.id + '/edit';
+        let datasetSearchPath = '/sites/' + this.props.id + '/datasets';
+
         return (
             <div className="sidebar">
-                  <h4>Hello {this.props.name}</h4>
-                    <div className="sidebar-header">
-                        <button
-                            className="sidebar-toggle collapsed"
-                            onClick={this.toggleMenu.bind(this)}>
-
-                            <span className="icon-bar"></span>
-                            <span className="icon-bar"></span>
-                            <span className="icon-bar"></span>
-                        </button>
-                    </div>
-                    <div className={sidebarCollapse}>
-                        <ul className="nav navbar-nav">
-                            <li className={this.isPathActive('/sites')}>
-                                <a href="/account">Dashboard</a>
-                            </li>
-                            <li className={this.isPathActive('/sites/content')}>
-                                <a href="/account/settings">Content</a>
-                            </li>
-                            <li className={this.isPathActive('/sites/:id/edit')}>
-                                <a href="/account/settings">Settings</a>
-                            </li>
-                        </ul>
-                    </div>
+                  <div id="hello-card">
+                    <small>Welcome,</small>
+                    <h4>{this.props.name}</h4>
+                  </div>
+                  <div className={sidebarCollapse}>
+                      <ul className="nav nav-sidebar">
+                          <li className={this.isPathActive(dashboardPath)}>
+                              <Link to={dashboardPath}><i className="fa fa-dashboard fa-fw"></i> Dashboard</Link>
+                          </li>
+                          <li className={this.isPathActive(datasetSearchPath)}>
+                              <Link to={datasetSearchPath}><i className="fa fa-edit fa-fw"></i> Content</Link>
+                          </li>
+                          <li className={this.isPathActive(editPath)}>
+                              <Link to={editPath}><i className="fa fa-sliders fa-fw"></i> Settings</Link>
+                          </li>
+                      </ul>
+                </div>
             </div>
         );
     }

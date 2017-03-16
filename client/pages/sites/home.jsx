@@ -43,8 +43,15 @@ class HomePage extends React.Component {
     render() {
 
         return (
-            <section className="section-home container">
-                <div className="row">
+            <section className="container site-admin">
+                <div className="col-sm-2 left">
+                    <div className="sidebar">
+                        <div id="hello-card">
+                          <p>Create a site to get started.</p>
+                        </div>
+                    </div>
+                </div>
+                <div className="col-sm-10 center">
                     <h1>My Sites</h1>
                     <Link to="sites/new" className="btn btn-primary">Create New</Link>
                     <Sites sites={this.state.sites}/>

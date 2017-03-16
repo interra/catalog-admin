@@ -16,7 +16,6 @@ class SettingsPage extends React.Component {
         Actions.getUser();
 
         this.state = Store.getState();
-        console.log("CONSTRUCTOR",this.state);
     }
 
     componentDidMount() {

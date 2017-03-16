@@ -9,12 +9,15 @@ const Spinner = require('../../components/form/spinner.jsx');
 const TextControl = require('../../components/form/text-control.jsx');
 const TextAreaControl = require('../../components/form/textarea-control.jsx');
 const Slug = require('slug');
+const Navigatable = require('react-router-component').NavigatableMixin
+const ReactRouter = require('react-router');
 
 const propTypes = {
     hydrated: React.PropTypes.bool,
     loading: React.PropTypes.bool,
     showSaveSuccess: React.PropTypes.bool,
     error: React.PropTypes.string,
+    proc: React.PropTypes.string,
     hasError: React.PropTypes.object,
     help: React.PropTypes.object,
     slug: React.PropTypes.string,
@@ -27,6 +30,7 @@ class SitesForm extends React.Component {
     constructor(props) {
 
         super(props);
+
         this.state = {
             name: props.name,
             slug: props.slug,
@@ -37,21 +41,28 @@ class SitesForm extends React.Component {
 
     componentWillUpdate(nextProps, nextState) {
 
-      if (nextState.name != this.state.name) {
-        nextState.slug = Slug(nextState.name).toLowerCase();
-      }
+      if (this.props.proc == "new") {
 
-      if (nextState.slug != this.state.slug) {
-        nextState.slug = Slug(nextState.slug).toLowerCase();
+        // Sets slug for ID field from name field.
+        if (nextState.name != this.state.name) {
+          nextState.slug = Slug(nextState.name).toLowerCase();
+        }
+
+        // Slugifies direct editing of the slug field.
+        if (nextState.slug != this.state.slug) {
+          nextState.slug = Slug(nextState.slug).toLowerCase();
+        }
       }
 
     }
 
     componentWillReceiveProps(nextProps) {
 
-        this.setState({
-            name: nextProps.name
-        });
+      this.setState({
+          name: nextProps.name,
+          slug: nextProps.slug,
+          description: nextProps.description
+      });
     }
 
     handleSubmit(event) {
@@ -59,16 +70,31 @@ class SitesForm extends React.Component {
         event.preventDefault();
         event.stopPropagation();
 
-        Actions.saveSite({
-            name: this.state.name,
-            _id: this.state.slug,
-            description: this.state.description
-        });
+        if (this.props.proc == "new") {
+
+            Actions.saveSite({
+                name: this.state.name,
+                _id: this.state.slug,
+                users: [{id: this.props.user.id}],
+                description: this.state.description
+            });
+            ReactRouter.browserHistory.push('/sites/' + this.state.slug);
+        }
+        else {
+            Actions.updateSite(this.state.slug, {
+              name: this.state.name,
+              users: [{id: this.props.user.id}],
+              description: this.state.description
+            })
+
+        }
+
     }
 
     render() {
 
         if (!this.props.hydrated) {
+            console.log(this);
             return (
                 <div className="alert alert-info">
                     Loading site data...
@@ -96,6 +122,8 @@ class SitesForm extends React.Component {
         }
         let helpName = this.props.help['name'] ? this.props.help['name'] : "The name of your agency or organization."
         let helpSlug = this.props.help['slug'] ? this.props.help['slug'] : "A unique identifier for your site."
+        let slugDisabled = this.props.proc == "edit" ? true : false;
+        let buttonDescription = this.props.proc == "edit" ? "Edit site" : "Create Site";
 
         return (
             <form onSubmit={this.handleSubmit.bind(this)}>
@@ -120,7 +148,7 @@ class SitesForm extends React.Component {
                         onChange={LinkState.bind(this)}
                         hasError={this.props.hasError['slug']}
                         help={helpSlug}
-                        disabled={this.props.loading}
+                        disabled={slugDisabled}
                     />
                   <TextAreaControl
                         name="description"
@@ -136,8 +164,7 @@ class SitesForm extends React.Component {
                             type="submit"
                             inputClasses={{ 'btn-primary': true }}
                             disabled={this.props.loading}>
-
-                            Create site
+                            {buttonDescription}
                             <Spinner
                                 space="left"
                                 show={this.props.loading}
