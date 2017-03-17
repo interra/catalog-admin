@@ -2,6 +2,7 @@
 const ApiActions = require('../../actions/api');
 const Constants = require('./constants');
 const Store = require('./store');
+const ReactRouter = require('react-router');
 
 
 class Actions {
@@ -35,8 +36,18 @@ class Actions {
             data,
             Store,
             Constants.SAVE_SITE,
-            Constants.SAVE_SITE_RESPONSE
+            Constants.SAVE_SITE_RESPONSE,
+            (err, response) => {
+
+                if (!err) {
+                    ReactRouter.browserHistory.push('/sites/' + data._id);
+
+                    window.scrollTo(0, 0);
+                }
+            }
         );
+
+
     }
 
     static updateSite(id, data) {
@@ -47,6 +58,25 @@ class Actions {
             Store,
             Constants.UPDATE_SITE,
             Constants.UPDATE_SITE_RESPONSE
+        );
+    }
+
+    static delete(id) {
+
+        ApiActions.delete(
+            `/api/sites/${id}`,
+            undefined,
+            Store,
+            Constants.DELETE,
+            Constants.DELETE_RESPONSE,
+            (err, response) => {
+
+                if (!err) {
+                    ReactRouter.browserHistory.push('/sites');
+
+                    window.scrollTo(0, 0);
+                }
+            }
         );
     }
 

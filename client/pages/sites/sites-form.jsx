@@ -10,7 +10,6 @@ const TextControl = require('../../components/form/text-control.jsx');
 const TextAreaControl = require('../../components/form/textarea-control.jsx');
 const Slug = require('slug');
 const Navigatable = require('react-router-component').NavigatableMixin
-const ReactRouter = require('react-router');
 
 const propTypes = {
     hydrated: React.PropTypes.bool,
@@ -78,7 +77,6 @@ class SitesForm extends React.Component {
                 users: [{id: this.props.user.id}],
                 description: this.state.description
             });
-            ReactRouter.browserHistory.push('/sites/' + this.state.slug);
         }
         else {
             Actions.updateSite(this.state.slug, {

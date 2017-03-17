@@ -3,6 +3,8 @@ const FluxConstant = require('flux-constant');
 
 
 module.exports = FluxConstant.set([
+    'DELETE',
+    'DELETE_RESPONSE',
     'GET_USER',
     'GET_USER_RESPONSE',
     'GET_SITES',

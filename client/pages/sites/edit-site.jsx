@@ -6,6 +6,7 @@ const Actions = require('./actions');
 const Store = require('./store');
 const Sidebar = require('./sidebar.jsx');
 const SitesForm = require('./sites-form.jsx');
+const DeleteForm = require('../../../client/components/admin/delete-form.jsx');
 
 const Link = ReactRouter.Link;
 
@@ -16,6 +17,8 @@ class EditSite extends React.Component {
         Actions.getSite(props.params.id);
         Actions.getUser();
         this.state = Store.getState();
+        this.state.site.redirect = false;
+        this.state.site.proc = "edit";
     }
     componentDidMount() {
 
@@ -34,6 +37,8 @@ class EditSite extends React.Component {
     }
 
     render() {
+        console.log("state.delate", this.state.delete);
+        console.log("id", this.props.params.id);
 
         return (
             <section className="container site-admin">
@@ -43,6 +48,10 @@ class EditSite extends React.Component {
                 <div className="col-sm-10 center">
                     <h1>Edit Site</h1>
                     <SitesForm user={this.state.user} {...this.state.site} />
+                    <DeleteForm
+                        {...this.state.delete}
+                        action={Actions.delete.bind(Actions, this.props.params.id)}
+                    />
                 </div>
             </section>
         );

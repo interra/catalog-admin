@@ -58,6 +58,7 @@ const reducer = function (state = initialState, action) {
             error: validation.error,
             hasError: validation.hasError,
             hydrated: true,
+            redirect: true,
             help: validation.help
         };
 
@@ -79,7 +80,7 @@ const reducer = function (state = initialState, action) {
     }
 
     if (action.type === Constants.UPDATE_SITE_RESPONSE) {
-      
+
         const validation = ParseValidation(action.response);
         const stateUpdates = {
             loading: false,
