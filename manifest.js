@@ -70,6 +70,7 @@ const manifest = {
                         AdminGroup: './server/models/admin-group',
                         Admin: './server/models/admin',
                         AuthAttempt: './server/models/auth-attempt',
+                        Dataset: './server/models/dataset',
                         Session: './server/models/session',
                         Site: './server/models/site',
                         Status: './server/models/status',
@@ -111,6 +112,12 @@ const manifest = {
         },
         {
             plugin: './server/api/contact',
+            options: {
+                routes: { prefix: '/api' }
+            }
+        },
+        {
+            plugin: './server/api/datasets',
             options: {
                 routes: { prefix: '/api' }
             }

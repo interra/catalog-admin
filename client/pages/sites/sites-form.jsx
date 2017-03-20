@@ -92,7 +92,7 @@ class SitesForm extends React.Component {
     render() {
 
         if (!this.props.hydrated) {
-            console.log(this);
+
             return (
                 <div className="alert alert-info">
                     Loading site data...
@@ -130,7 +130,6 @@ class SitesForm extends React.Component {
                     <TextControl
                         name="name"
                         label="Name"
-                        help="wtf"
                         hideHelp="false"
                         placeholder="Enter your site name"
                         value={this.state.name}

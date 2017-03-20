@@ -1,14 +1,13 @@
 'use strict';
 const Constants = require('../constants');
 const ObjectAssign = require('object-assign');
-const ParseValidation = require('../../../helpers/parse-validation');
+const ParseValidation = require('../../../../helpers/parse-validation');
 
 
 const initialState = {
     hydrated: false,
     loading: false,
     showSaveSuccess: false,
-    showFetchFailure: false,
     error: undefined,
     proc: "edit",
     hasError: {},
@@ -19,15 +18,14 @@ const initialState = {
 };
 const reducer = function (state = initialState, action) {
 
-    if (action.type === Constants.GET_SITE) {
+    if (action.type === Constants.GET_DATASET) {
         return ObjectAssign({}, state, {
             loading: true,
             hydrated: false
         });
     }
 
-    if (action.type.name === Constants.GET_SITE_RESPONSE.name) {
-
+    if (action.type === Constants.GET_DATASET_RESPONSE) {
         const validation = ParseValidation(action.response);
 
         return ObjectAssign({}, state, {
@@ -35,7 +33,6 @@ const reducer = function (state = initialState, action) {
             hydrated: true,
             error: validation.error,
             hasError: validation.hasError,
-            showFetchFailure: validation.error ? true : false,
             help: validation.help,
             name: action.response.name,
             slug: action.response._id,
@@ -43,7 +40,7 @@ const reducer = function (state = initialState, action) {
         });
     }
 
-    if (action.type === Constants.SAVE_SITE) {
+    if (action.type === Constants.SAVE_DATASET) {
         return ObjectAssign({}, state, {
             loading: true,
             name: action.request.data.name,
@@ -52,7 +49,7 @@ const reducer = function (state = initialState, action) {
         });
     }
 
-    if (action.type === Constants.SAVE_SITE_RESPONSE) {
+    if (action.type === Constants.SAVE_DATASET_RESPONSE) {
 
         const validation = ParseValidation(action.response);
         const stateUpdates = {
@@ -72,7 +69,7 @@ const reducer = function (state = initialState, action) {
         return ObjectAssign({}, state, stateUpdates);
     }
 
-    if (action.type === Constants.UPDATE_SITE) {
+    if (action.type === Constants.UPDATE_DATASET) {
 
         return ObjectAssign({}, state, {
             loading: true,
@@ -82,7 +79,7 @@ const reducer = function (state = initialState, action) {
         });
     }
 
-    if (action.type === Constants.UPDATE_SITE_RESPONSE) {
+    if (action.type === Constants.UPDATE_DATASET_RESPONSE) {
 
         const validation = ParseValidation(action.response);
         const stateUpdates = {
@@ -100,7 +97,7 @@ const reducer = function (state = initialState, action) {
 
         return ObjectAssign({}, state, stateUpdates);
     }
-    if (action.type === Constants.HIDE_SITE_SAVE_SUCCESS) {
+    if (action.type === Constants.HIDE_DATASET_SAVE_SUCCESS) {
         return ObjectAssign({}, state, {
             showSaveSuccess: false
         });

@@ -10,11 +10,11 @@ const internals = {};
 
 internals.applyRoutes = function (server, next) {
 
-    const Site = server.plugins['hapi-mongo-models'].Site;
+    const Dataset = server.plugins['hapi-mongo-models'].Dataset;
 
     server.route({
         method: 'GET',
-        path: '/sites',
+        path: '/datasets',
         config: {
             auth: {
                 strategy: 'session',
@@ -47,7 +47,7 @@ internals.applyRoutes = function (server, next) {
                 query.users = { $in: [userId] };
             }
 
-            Site.pagedFind(query, fields, sort, limit, page, (err, results) => {
+            Dataset.pagedFind(query, fields, sort, limit, page, (err, results) => {
 
                 if (err) {
                     return reply(err);
@@ -61,28 +61,28 @@ internals.applyRoutes = function (server, next) {
 
     server.route({
         method: 'GET',
-        path: '/sites/{id}',
+        path: '/datasets/{id}',
         config: {
             auth: {
                 strategy: 'session',
-                scope: ['admin','site-{params.id}']
+                scope: ['admin','dataset-{params.id}']
             }
         },
         handler: function (request, reply) {
 
             const query = { '_id': request.params.id };
 
-            Site.findOne(query, (err, site) => {
+            Dataset.findOne(query, (err, dataset) => {
 
                 if (err) {
                     return reply(err);
                 }
 
-                if (!site) {
+                if (!dataset) {
                     return reply(Boom.notFound('Document not found.'));
                 }
 
-                reply(site);
+                reply(dataset);
             });
         }
     });
@@ -90,7 +90,7 @@ internals.applyRoutes = function (server, next) {
 
     server.route({
         method: 'POST',
-        path: '/sites',
+        path: '/datasets',
         config: {
             auth: {
                 strategy: 'session',
@@ -99,6 +99,7 @@ internals.applyRoutes = function (server, next) {
             validate: {
                 payload: {
                     _id: Joi.string().required(),
+                    siteId: Joi.string(),
                     name: Joi.string().required(),
                     description: Joi.string().required(),
                     users: Joi.array()
@@ -110,12 +111,13 @@ internals.applyRoutes = function (server, next) {
             const name = request.payload.name;
             const description = request.payload.description;
             const users = request.payload.users;
+            const siteId = request.payload.siteId;
 
             const query = { '_id': request.payload._id };
 
-            Site.findOne(query, (err, site) => {
+            Dataset.findOne(query, (err, dataset) => {
 
-                if (site) {
+                if (dataset) {
                     return reply(Boom.conflict('_id already exists.'));
                 }
 
@@ -123,7 +125,7 @@ internals.applyRoutes = function (server, next) {
                     return reply(err);
                 }
 
-                Site.create(request.payload._id, name, description, users, (err, result) => {
+                Dataset.create(request.payload._id, name, siteId, description, users, (err, result) => {
 
                     if (err) {
                         return reply(err);
@@ -137,11 +139,11 @@ internals.applyRoutes = function (server, next) {
 
     server.route({
         method: 'PUT',
-        path: '/sites/{id}',
+        path: '/datasets/{id}',
         config: {
             auth: {
                 strategy: 'session',
-                scope: ['admin','site-{params.id}']
+                scope: ['admin','dataset-{params.id}']
             },
             validate: {
                 payload: {
@@ -164,28 +166,28 @@ internals.applyRoutes = function (server, next) {
 
             const query = { '_id': id };
 
-            Site.findOneAndUpdate(query, update, (err, site) => {
+            Dataset.findOneAndUpdate(query, update, (err, dataset) => {
 
                 if (err) {
                     return reply(err);
                 }
 
-                if (!site) {
+                if (!dataset) {
                     return reply(Boom.notFound('Document not found.'));
                 }
 
-                reply(site);
+                reply(dataset);
             });
         }
     });
 
     server.route({
         method: 'PUT',
-        path: '/sites/{id}/users',
+        path: '/datasets/{id}/users',
         config: {
             auth: {
                 strategy: 'session',
-                scope: ['admin','site-{params.id}']
+                scope: ['admin','dataset-{params.id}']
             },
             validate: {
                 payload: {
@@ -193,22 +195,22 @@ internals.applyRoutes = function (server, next) {
                 }
             },
             pre: [{
-                assign: 'site',
+                assign: 'dataset',
                 method: function (request, reply) {
 
                     const query = { '_id': request.params.id };
 
-                    Site.findOne(query, (err, site) => {
+                    Dataset.findOne(query, (err, dataset) => {
 
                         if (err) {
                             return reply(err);
                         }
 
-                        if (!site) {
+                        if (!dataset) {
                             return reply(Boom.notFound('Document not found.'));
                         }
 
-                        reply(site);
+                        reply(dataset);
                     });
                 }
             }]
@@ -216,7 +218,7 @@ internals.applyRoutes = function (server, next) {
         handler: function (request, reply) {
 
             Async.auto({
-                site: function (done) {
+                dataset: function (done) {
 
                     const id = request.params.id;
                     const users = request.payload.users;
@@ -228,7 +230,7 @@ internals.applyRoutes = function (server, next) {
 
                     const query = { '_id': id };
 
-                    Site.findOneAndUpdate(query, update, done);
+                    Dataset.findOneAndUpdate(query, update, done);
                 }
             }, (err, results) => {
 
@@ -236,32 +238,31 @@ internals.applyRoutes = function (server, next) {
                     return reply(err);
                 }
 
-                reply(results.site);
+                reply(results.dataset);
             });
         }
     });
 
-    // TODO: Only let users change sites they own.
     server.route({
         method: 'DELETE',
-        path: '/sites/{id}',
+        path: '/datasets/{id}',
         config: {
             auth: {
                 strategy: 'session',
-                scope: ['admin','site-{params.id}']
+                scope: ['admin','dataset-{params.id}']
             }
         },
         handler: function (request, reply) {
 
             const query = { '_id': request.params.id };
 
-            Site.findOneAndDelete(query, (err, site) => {
+            Dataset.findOneAndDelete(query, (err, dataset) => {
 
                 if (err) {
                     return reply(err);
                 }
 
-                if (!site) {
+                if (!dataset) {
                     return reply(Boom.notFound('Document not found.'));
                 }
 
@@ -284,5 +285,5 @@ exports.register = function (server, options, next) {
 
 
 exports.register.attributes = {
-    name: 'site'
+    name: 'dataset'
 };

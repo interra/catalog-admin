@@ -8,7 +8,9 @@ class SitesPage extends React.Component {
 
         const neck = [
             <link key="layout" rel="stylesheet" href="/public/layouts/default.min.css" />,
-            <link key="page" rel="stylesheet" href="/public/pages/sites.min.css" />
+            <link key="page" rel="stylesheet" href="/public/pages/sites.min.css" />,
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.0/jquery.slim.min.js"></script>,
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
         ];
         const feet = <script src="/public/pages/sites.min.js"></script>;
 

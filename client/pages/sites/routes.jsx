@@ -7,7 +7,9 @@ const ReactRouter = require('react-router');
 const CreateSite = require('./create-site.jsx');
 const ViewSite = require('./view-site.jsx');
 const EditSite = require('./edit-site.jsx');
-const DatasetSearchSite = require('./datasets-search.jsx');
+const DatasetSearch = require('./datasets/datasets-search.jsx');
+const CreateDataset = require('./datasets/create-dataset.jsx');
+const DatasetView = require('./datasets/dataset-view.jsx');
 
 
 const IndexRoute = ReactRouter.IndexRoute;
@@ -23,7 +25,9 @@ const Routes = (
             <Route path="new" component={CreateSite} />
             <Route path=":id" component={ViewSite} />
             <Route path=":id/edit" component={EditSite} />
-            <Route path=":id/datasets" component={DatasetSearchSite} />
+            <Route path=":id/datasets" component={DatasetSearch} />
+            <Route path=":id/datasets/new" component={CreateDataset} />
+            <Route path=":id/datasets/:datasetId" component={DatasetView} />
             <Route path="*" component={NotFound} />
         </Route>
         <Route path="*" component={NotFound} />

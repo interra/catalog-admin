@@ -1,5 +1,5 @@
 'use strict';
-const Constants = require('../constants');
+const Constants = require('./constants');
 const ObjectAssign = require('object-assign');
 const ParseValidation = require('../../../helpers/parse-validation');
 
@@ -9,41 +9,34 @@ const initialState = {
     loading: false,
     showSaveSuccess: false,
     error: undefined,
+    proc: "edit",
     hasError: {},
     help: {},
-    username: '',
-    id: '',
-    email: ''
+    name: "",
+    slug: "",
+    description: ""
 };
 const reducer = function (state = initialState, action) {
 
-    if (action.type === Constants.GET_USER) {
+    if (action.type === Constants.GET_SITE) {
         return ObjectAssign({}, state, {
             loading: true,
             hydrated: false
         });
     }
 
-    if (action.type.name === Constants.GET_USER_RESPONSE.name) {
-
+    if (action.type === Constants.GET_SITE_RESPONSE) {
         const validation = ParseValidation(action.response);
+
         return ObjectAssign({}, state, {
             loading: false,
             hydrated: true,
             error: validation.error,
             hasError: validation.hasError,
             help: validation.help,
-            username: action.response.username,
-            id: action.response._id,
-            email: action.response.email
-        });
-    }
-
-    if (action.type === Constants.SAVE_USER) {
-        return ObjectAssign({}, state, {
-            loading: true,
-            username: action.request.data.username,
-            email: action.request.data.email
+            name: action.response.name,
+            slug: action.response._id,
+            description: action.response.description
         });
     }
 

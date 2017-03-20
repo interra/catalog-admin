@@ -4,21 +4,17 @@ const React = require('react');
 const ReactRouter = require('react-router');
 const Actions = require('./actions');
 const Store = require('./store');
-const Sidebar = require('./sidebar.jsx');
-const SitesForm = require('./sites-form.jsx');
-const DeleteForm = require('../../../client/components/admin/delete-form.jsx');
+const Sidebar = require('../sidebar.jsx');
 
 const Link = ReactRouter.Link;
 
-class EditSite extends React.Component {
+class DatasetSearchSite extends React.Component {
     constructor(props) {
+
         super(props);
 
         Actions.getSite(props.params.id);
-        Actions.getUser();
         this.state = Store.getState();
-        this.state.site.redirect = false;
-        this.state.site.proc = "edit";
     }
     componentDidMount() {
 
@@ -26,8 +22,7 @@ class EditSite extends React.Component {
     }
 
     componentWillUnmount() {
-        // Don't show success alert if leaving page.
-        this.state.site.showSaveSuccess = false;
+
         this.unsubscribeStore();
     }
 
@@ -38,18 +33,26 @@ class EditSite extends React.Component {
 
     render() {
 
+        let createDataset = "/sites/" + this.state.site.slug + "/datasets/new"
+
         return (
             <section className="container site-admin">
                 <div className="col-sm-2 left">
                     <Sidebar name={this.state.site.name} id={this.props.params.id} location={this.props.location} />
                 </div>
                 <div className="col-sm-10 center">
-                    <h1>Edit Site</h1>
-                    <SitesForm user={this.state.user} {...this.state.site} />
-                    <DeleteForm
-                        {...this.state.delete}
-                        action={Actions.delete.bind(Actions, this.props.params.id)}
-                    />
+                    <h1>Datasets</h1>
+                    <div className="btn-group" role="group">
+                        <button type="button" className="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Create New
+                            <span className="caret"></span>
+                        </button>
+                        <ul className="dropdown-menu">
+                            <li><Link to={createDataset}>Dataset</Link></li>
+                            <li><a href="#">Group</a></li>
+                            <li><a href="#">Page</a></li>
+                        </ul>
+                    </div>
                 </div>
             </section>
         );
@@ -57,4 +60,4 @@ class EditSite extends React.Component {
 }
 
 
-module.exports = EditSite;
+module.exports = DatasetSearchSite;

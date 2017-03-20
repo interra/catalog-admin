@@ -33,6 +33,39 @@ class ViewSite extends React.Component {
 
     render() {
 
+        if (!this.state.site.hydrated) {
+            return (
+              <section className="container site-admin">
+                  <div className="col-sm-2 left">
+                      <Sidebar name={this.state.site.name} id={this.props.params.id} location={this.props.location} />
+                  </div>
+                  <div className="col-sm-10 center">
+                      <div className="row">
+                          <h1 className="page-header">Dashboard</h1>
+                          <div className="alert alert-info">
+                            loading...
+                          </div>
+                      </div>
+                  </div>
+              </section>
+
+            );
+        }
+
+        if (this.state.site.showFetchFailure) {
+            return (
+                <section className="section-account-details container">
+                    <h1 className="page-header">
+                        <Link to="/sites">Sites</Link> / Error
+                    </h1>
+                    <div className="alert alert-danger">
+                        {this.state.site.error}
+                    </div>
+                </section>
+            );
+        }
+
+
         return (
             <section className="container site-admin">
                   <div className="col-sm-2 left">
