@@ -23,6 +23,7 @@ internals.applyRoutes = function (server, next) {
             validate: {
                 query: {
                     name: Joi.string().allow(''),
+                    siteId: Joi.string().default(''),
                     fields: Joi.string(),
                     sort: Joi.string().default('_id'),
                     limit: Joi.number().default(20),
@@ -35,6 +36,9 @@ internals.applyRoutes = function (server, next) {
             const query = {};
             if (request.query.name) {
                 query.name = new RegExp('^.*?' + EscapeRegExp(request.query.name) + '.*$', 'i');
+            }
+            if (request.query.siteId) {
+              query.siteId = request.query.siteId;
             }
             const fields = request.query.fields;
             const sort = request.query.sort;

@@ -53,7 +53,7 @@ class CreateDataset extends React.Component {
               </div>
               <div className="col-sm-10 center">
                   <h1>Create Dataset</h1>
-                  <DatasetForm user={this.state.user} site={this.state.site} dataset={this.state.dataset} buts="wtf"/>
+                  <DatasetForm user={this.state.user} site={this.state.site} dataset={this.state.dataset} />
               </div>
           </section>
         );

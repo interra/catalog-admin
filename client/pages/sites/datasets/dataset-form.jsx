@@ -58,11 +58,11 @@ class DatasetForm extends React.Component {
 
     componentWillReceiveProps(nextProps) {
 
-      this.setState({
+      this.setState({"dataset": {
           name: nextProps.dataset.name,
           slug: nextProps.dataset.slug,
           description: nextProps.dataset.description
-      });
+      }});
     }
 
     handleSubmit(event) {
