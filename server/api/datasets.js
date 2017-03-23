@@ -62,6 +62,44 @@ internals.applyRoutes = function (server, next) {
         }
     });
 
+    server.route({
+        method: 'GET',
+        path: '/datasets/count',
+        config: {
+            auth: {
+                strategy: 'session',
+                scope: ['admin','account']
+            },
+            validate: {
+                query: {
+                    siteId: Joi.string().default('')
+                }
+            }
+        },
+        handler: function (request, reply) {
+
+            const query = {};
+            if (request.query.siteId) {
+              query.siteId = request.query.siteId;
+            }
+
+            // Admins can see everything.
+            if (!request.auth.credentials.roles && !request.auth.create.roles.admin && !request.auth.credentials.roles.admin.isMemberOf('admin')) {
+                const userId = request.auth.credentials.session.userId;
+                query.users = { $in: [userId] };
+            }
+
+            Dataset.count(query, (err, results) => {
+
+                if (err) {
+                    return reply(err);
+                }
+
+                reply(results);
+            });
+        }
+    });
+
 
     server.route({
         method: 'GET',

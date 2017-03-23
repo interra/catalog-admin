@@ -6,6 +6,7 @@ const ReactRouter = require('react-router');
 
 
 class Actions {
+
     static getSites() {
 
         ApiActions.get(
@@ -25,6 +26,17 @@ class Actions {
             Store,
             Constants.GET_SITE,
             Constants.GET_SITE_RESPONSE
+        );
+    }
+
+    static getDatasetCount(id) {
+
+        ApiActions.get(
+            '/api/datasets/count',
+            {"siteId": id},
+            Store,
+            Constants.GET_COUNT,
+            Constants.GET_COUNT_RESPONSE
         );
     }
 

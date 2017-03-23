@@ -14,6 +14,7 @@ class ViewSite extends React.Component {
         super(props);
 
         Actions.getSite(props.params.id);
+        Actions.getDatasetCount(props.params.id);
         this.state = Store.getState();
     }
     componentDidMount() {
@@ -84,7 +85,7 @@ class ViewSite extends React.Component {
                       <div className="panel panel-default">
                           <div className="panel-heading">Datasets</div>
                           <div className="panel-content">
-                              <div className="huge">46</div>
+                              <div className="huge">{this.state.count.total}</div>
                           </div>
                           <a href="#">
                               <div className="panel-footer">
@@ -99,7 +100,7 @@ class ViewSite extends React.Component {
                       <div className="panel panel-default">
                           <div className="panel-heading">Page Visits</div>
                           <div className="panel-content">
-                            <div className="huge">58,342</div>
+                            <div className="huge">NA</div>
                         </div>
                         <a href="#">
                               <div className="panel-footer">
@@ -114,7 +115,7 @@ class ViewSite extends React.Component {
                         <div className="panel panel-default">
                             <div className="panel-heading">Asset Downloads</div>
                             <div className="panel-content">
-                              <div className="huge">231</div>
+                              <div className="huge">NA</div>
                           </div>
                           <a href="#">
                               <div className="panel-footer">
@@ -129,7 +130,7 @@ class ViewSite extends React.Component {
                       <div className="panel panel-default">
                           <div className="panel-heading">Comments</div>
                           <div className="panel-content">
-                              <div className="huge">12</div>
+                              <div className="huge">NA</div>
                         </div>
                           <a href="#">
                               <div className="panel-footer">
