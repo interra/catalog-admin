@@ -42,7 +42,7 @@ internals.applyRoutes = function (server, next) {
             const page = request.query.page;
 
             // Admins can see everything.
-            if (!request.auth.credentials.roles && !request.auth.create.roles.admin && !request.auth.credentials.roles.admin.isMemberOf('admin')) {
+            if (request.auth.credentials.roles.admin === undefined) {
                 const userId = request.auth.credentials.session.userId;
                 query.users = { $in: [userId] };
             }

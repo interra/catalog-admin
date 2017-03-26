@@ -74,14 +74,14 @@ class SitesForm extends React.Component {
             Actions.saveSite({
                 name: this.state.name,
                 _id: this.state.slug,
-                users: [{id: this.props.user.id}],
+                users: [this.props.user.id],
                 description: this.state.description
             });
         }
         else {
             Actions.updateSite(this.state.slug, {
               name: this.state.name,
-              users: [{id: this.props.user.id}],
+              users: [this.props.user.id],
               description: this.state.description
             })
 
