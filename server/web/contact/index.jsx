@@ -17,14 +17,10 @@ class ContactPage extends React.Component {
                 <div className="row">
                     <div className="col-sm-6" id="app-mount"></div>
                     <div className="col-sm-6 text-center">
-                        <h1 className="page-header">Contact us</h1>
+                        <h1 className="page-header">Contact Interra Data</h1>
                         <p className="lead">
-                            Freddy can't wait to hear from you.
+                            Let us know if you have any questions or would like to contribute.
                         </p>
-                        <i className="fa fa-reply-all bamf"></i>
-                        <div>
-                            1428 Elm Street &bull; San Francisco, CA 94122
-                        </div>
                     </div>
                 </div>
             </Layout>

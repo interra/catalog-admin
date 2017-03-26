@@ -10,14 +10,14 @@ class HomePage extends React.Component {
 
         return (
             <Layout
-                title="Aqua"
+                title="Interra Data"
                 neck={neck}
                 activeTab="home">
 
                 <div className="jumbotron">
-                    <h1>Success</h1>
+                    <h1>Interra Data</h1>
                     <div>
-                        <p className="lead">Your Node.js website and user system is running.</p>
+                        <p className="lead">This is a pre pre pre-alpha version of Interra Data.</p>
                         <div>
                             <a className="btn btn-primary btn-lg" href="/signup">
                                 Create an account
@@ -33,12 +33,9 @@ class HomePage extends React.Component {
                     <div className="col-sm-4">
                         <div className="panel panel-default">
                             <div className="panel-body">
-                                <h3>About us</h3>
+                                <h3>About</h3>
                                 <p>
-                                    At vero eos et accusamus et iusto odio
-                                    dignissimos ducimus qui blanditiis
-                                    praesentium voluptatum deleniti atque
-                                    corrupti.
+                                    Interra Data is an Open Source Open Data catalog driven by static files.
                                 </p>
                                 <a href="/about" className="btn btn-default btn-block">
                                     Learn more
@@ -51,10 +48,7 @@ class HomePage extends React.Component {
                             <div className="panel-body">
                                 <h3>Sign up</h3>
                                 <p>
-                                    At vero eos et accusamus et iusto odio
-                                    dignissimos ducimus qui blanditiis
-                                    praesentium voluptatum deleniti atque
-                                    corrupti.
+                                    Sign up for an account to try it out.
                                 </p>
                                 <a href="/signup" className="btn btn-default btn-block">
                                     Learn more
@@ -67,10 +61,7 @@ class HomePage extends React.Component {
                             <div className="panel-body">
                                 <h3>Contact us</h3>
                                 <p>
-                                    At vero eos et accusamus et iusto odio
-                                    dignissimos ducimus qui blanditiis
-                                    praesentium voluptatum deleniti atque
-                                    corrupti.
+                                    Contact us if you have any questions.
                                 </p>
                                 <a href="/contact" className="btn btn-default btn-block">
                                     Learn more

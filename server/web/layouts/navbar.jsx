@@ -22,11 +22,8 @@ class Navbar extends React.Component {
                 <div className="container">
                     <div className="navbar-header">
                         <a className="navbar-brand" href="/">
-                            <img
-                                className="navbar-logo"
-                                src="/public/media/logo-square.png"
-                            />
-                            <span className="navbar-brand-label">Aqua</span>
+                            <img className="navbar-logo" src="/public/media/interra-leaf.png" />
+                            <span className="navbar-brand-label">interra</span>
                         </a>
                     </div>
                     <div className="navbar-collapse collapse">

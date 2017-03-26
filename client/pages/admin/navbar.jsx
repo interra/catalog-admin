@@ -45,15 +45,12 @@ class Navbar extends React.Component {
         });
 
         return (
-            <div className="navbar navbar-inverse navbar-fixed-top">
+            <div className="navbar navbar-default navbar-fixed-top">
                 <div className="container">
                     <div className="navbar-header">
                         <Link className="navbar-brand" to="/admin">
-                            <img
-                                className="navbar-logo"
-                                src="/public/media/logo-square-inverse.png"
-                            />
-                            <span className="navbar-brand-label">Aqua</span>
+                          <img className="navbar-logo" src="/public/media/interra-leaf.png" />
+                          <span className="navbar-brand-label">interra</span>
                         </Link>
                         <button
                             className="navbar-toggle collapsed"
