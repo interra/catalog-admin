@@ -1,7 +1,7 @@
 {
-  "name": "aqua",
-  "version": "5.0.5",
-  "description": "A website and user system for Node.js",
+  "name": "interra-admin",
+  "version": "0.1.0",
+  "description": "Admin component for Interra Data",
   "main": "index.js",
   "scripts": {
     "start": "gulp",
@@ -11,7 +11,7 @@
     "test-server": "lab -t 99 -S -T ./test/lab/transform -L --lint-options '{\"extensions\":[\".js\",\".jsx\"]}' ./test/server/ ./test/lab/server-after.js",
     "postinstall": "gulp build"
   },
-  "author": "Reza Akhavan <jedireza@gmail.com> (http://reza.akhavan.me/)",
+  "author": "Aaron Couch",
   "license": "MIT",
   "engines": {
     "node": ">=6.0.0"
@@ -41,6 +41,7 @@
     "nodemailer-markdown": "1.x.x",
     "object-assign": "4.x.x",
     "react": "15.x.x",
+    "react-router-component": "^0.36.5",
     "redux": "3.x.x",
     "slug": "0.9.x",
     "vision": "4.x.x",
