@@ -14,16 +14,15 @@ internals.applyRoutes = function (server, next) {
 
     server.route({
         method: 'GET',
-        path: '/datasets',
+        path: '/sites/{siteId}/datasets',
         config: {
             auth: {
                 strategy: 'session',
-                scope: ['admin','account']
+                scope: ['admin','site-{params.siteId}']
             },
             validate: {
                 query: {
                     name: Joi.string().allow(''),
-                    siteId: Joi.string().default(''),
                     fields: Joi.string(),
                     sort: Joi.string().default('_id'),
                     limit: Joi.number().default(20),
@@ -37,19 +36,11 @@ internals.applyRoutes = function (server, next) {
             if (request.query.name) {
                 query.name = new RegExp('^.*?' + EscapeRegExp(request.query.name) + '.*$', 'i');
             }
-            if (request.query.siteId) {
-              query.siteId = request.query.siteId;
-            }
+            query.siteId = request.params.siteId;
             const fields = request.query.fields;
             const sort = request.query.sort;
             const limit = request.query.limit;
             const page = request.query.page;
-
-            // Admins can see everything.
-            if (!request.auth.credentials.roles && !request.auth.create.roles.admin && !request.auth.credentials.roles.admin.isMemberOf('admin')) {
-                const userId = request.auth.credentials.session.userId;
-                query.users = { $in: [userId] };
-            }
 
             Dataset.pagedFind(query, fields, sort, limit, page, (err, results) => {
 
@@ -64,11 +55,11 @@ internals.applyRoutes = function (server, next) {
 
     server.route({
         method: 'GET',
-        path: '/datasets/count',
+        path: '/sites/{siteId}/datasets/count',
         config: {
             auth: {
                 strategy: 'session',
-                scope: ['admin','account']
+                scope: ['admin','site-{params.siteId}']
             },
             validate: {
                 query: {
@@ -79,15 +70,7 @@ internals.applyRoutes = function (server, next) {
         handler: function (request, reply) {
 
             const query = {};
-            if (request.query.siteId) {
-              query.siteId = request.query.siteId;
-            }
-
-            // Admins can see everything.
-            if (!request.auth.credentials.roles && !request.auth.create.roles.admin && !request.auth.credentials.roles.admin.isMemberOf('admin')) {
-                const userId = request.auth.credentials.session.userId;
-                query.users = { $in: [userId] };
-            }
+            query.siteId = request.params.siteId;
 
             Dataset.count(query, (err, results) => {
 
@@ -103,16 +86,16 @@ internals.applyRoutes = function (server, next) {
 
     server.route({
         method: 'GET',
-        path: '/datasets/{id}',
+        path: '/sites/{siteId}/datasets/{id}',
         config: {
             auth: {
                 strategy: 'session',
-                scope: ['admin','dataset-{params.id}']
+                scope: ['admin','site-{params.siteId}']
             }
         },
         handler: function (request, reply) {
 
-            const query = { '_id': request.params.id };
+            const query = { '_id': request.params.id, 'siteId': request.params.siteId };
 
             Dataset.findOne(query, (err, dataset) => {
 
@@ -132,7 +115,7 @@ internals.applyRoutes = function (server, next) {
 
     server.route({
         method: 'POST',
-        path: '/datasets',
+        path: '/sites/{siteId}/datasets',
         config: {
             auth: {
                 strategy: 'session',
@@ -141,7 +124,6 @@ internals.applyRoutes = function (server, next) {
             validate: {
                 payload: {
                     _id: Joi.string().required(),
-                    siteId: Joi.string(),
                     name: Joi.string().required(),
                     description: Joi.string().required(),
                     users: Joi.array()
@@ -153,7 +135,7 @@ internals.applyRoutes = function (server, next) {
             const name = request.payload.name;
             const description = request.payload.description;
             const users = request.payload.users;
-            const siteId = request.payload.siteId;
+            const siteId = request.params.siteId;
 
             const query = { '_id': request.payload._id };
 
@@ -181,11 +163,11 @@ internals.applyRoutes = function (server, next) {
 
     server.route({
         method: 'PUT',
-        path: '/datasets/{id}',
+        path: '/sites/{siteId}/datasets/{id}',
         config: {
             auth: {
                 strategy: 'session',
-                scope: ['admin','dataset-{params.id}']
+                scope: ['admin','site-{params.siteId}']
             },
             validate: {
                 payload: {
@@ -202,7 +184,8 @@ internals.applyRoutes = function (server, next) {
                 $set: {
                     name: request.payload.name,
                     description: request.payload.description,
-                    users: request.payload.users
+                    users: request.payload.users,
+                    siteId: request.params.siteId
                 }
             };
 
@@ -225,11 +208,11 @@ internals.applyRoutes = function (server, next) {
 
     server.route({
         method: 'PUT',
-        path: '/datasets/{id}/users',
+        path: '/sites/{siteId}/datasets/{id}/users',
         config: {
             auth: {
                 strategy: 'session',
-                scope: ['admin','dataset-{params.id}']
+                scope: ['admin','site-{params.siteId}']
             },
             validate: {
                 payload: {
@@ -287,11 +270,11 @@ internals.applyRoutes = function (server, next) {
 
     server.route({
         method: 'DELETE',
-        path: '/datasets/{id}',
+        path: '/sites/siteId/datasets/{id}',
         config: {
             auth: {
                 strategy: 'session',
-                scope: ['admin','dataset-{params.id}']
+                scope: ['admin','site-{params.siteId}']
             }
         },
         handler: function (request, reply) {

@@ -17,7 +17,7 @@ class EditSite extends React.Component {
 
         Actions.getSite(props.params.id);
         Actions.getUser();
-        Actions.getDataset(props.params.datasetId);
+        Actions.getDataset(props.params.id, props.params.datasetId);
         this.state = Store.getState();
         this.state.dataset.redirect = false;
         this.state.dataset.proc = "edit";

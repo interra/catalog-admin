@@ -19,12 +19,10 @@ class Actions {
         );
     }
 
-    static getResults(id, data) {
-
-        data.siteId = id;
+    static getResults(siteId, data) {
 
         ApiActions.get(
-            '/api/datasets',
+            `/api/sites/${siteId}/datasets`,
             data,
             Store,
             Constants.GET_RESULTS,

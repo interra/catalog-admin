@@ -74,17 +74,16 @@ class DatasetForm extends React.Component {
 
             Actions.saveDataset(this.props.site.slug, {
                 _id: this.state.dataset.slug,
-                siteId: this.props.site.slug,
                 name: this.state.dataset.name,
-                users: [{id: this.props.user.id}],
+                users: [this.props.user.id],
                 description: this.state.dataset.description
             });
 
         }
         else {
-            Actions.updateDataset(this.state.dataset.slug, {
+            Actions.updateDataset(this.props.site.slug, this.state.dataset.slug, {
               name: this.state.dataset.name,
-              users: [{id: this.props.user.id}],
+              users: [this.props.user.id],
               description: this.state.dataset.description
             })
 

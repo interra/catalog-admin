@@ -18,21 +18,10 @@ class Actions {
         );
     }
 
-    static getDatasets() {
+    static getDataset(siteId,id) {
 
         ApiActions.get(
-            '/api/datasets',
-            undefined,
-            Store,
-            Constants.GET_DATASETS,
-            Constants.GET_DATASETS_RESPONSE
-        );
-    }
-
-    static getDataset(id) {
-
-        ApiActions.get(
-            `/api/datasets/${id}`,
+            `/api/sites/${siteId}/datasets/${id}`,
             undefined,
             Store,
             Constants.GET_DATASET,
@@ -44,7 +33,7 @@ class Actions {
     static saveDataset(siteId, data) {
 
         ApiActions.post(
-            '/api/datasets',
+            `/api/sites/${siteId}/datasets`,
             data,
             Store,
             Constants.SAVE_DATASET,
@@ -62,10 +51,10 @@ class Actions {
 
     }
 
-    static updateDataset(id, data) {
+    static updateDataset(siteId, id, data) {
 
         ApiActions.put(
-            `/api/datasets/${id}`,
+            `/api/sites/${siteId}/datasets/${id}`,
             data,
             Store,
             Constants.UPDATE_DATASET,

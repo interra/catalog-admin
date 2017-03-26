@@ -14,7 +14,7 @@ class ViewSite extends React.Component {
         super(props);
 
         Actions.getSite(props.params.id);
-        Actions.getDataset(props.params.datasetId);
+        Actions.getDataset(props.params.id, props.params.datasetId);
 
         this.state = Store.getState();
     }

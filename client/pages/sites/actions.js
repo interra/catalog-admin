@@ -29,11 +29,11 @@ class Actions {
         );
     }
 
-    static getDatasetCount(id) {
+    static getDatasetCount(siteId) {
 
         ApiActions.get(
-            '/api/datasets/count',
-            {"siteId": id},
+            `/api/sites/${siteId}/datasets/count`,
+            undefined,
             Store,
             Constants.GET_COUNT,
             Constants.GET_COUNT_RESPONSE
