@@ -63,11 +63,8 @@ class Navbar extends React.Component {
                     </div>
                     <div className={navBarCollapse}>
                         <ul className="nav navbar-nav">
-                            <li className={this.isPathActive('/account')}>
-                                <a href="/account">My account</a>
-                            </li>
                             <li className={this.isPathActive('/account/settings')}>
-                                <a href="/account/settings">Settings</a>
+                                <a href="/account">My Account</a>
                             </li>
                         </ul>
                         <ul className="nav navbar-nav navbar-right">

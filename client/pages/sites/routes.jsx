@@ -7,7 +7,6 @@ const ReactRouter = require('react-router');
 const CreateSite = require('./create-site.jsx');
 const ViewSite = require('./view-site.jsx');
 const EditSite = require('./edit-site.jsx');
-const DatasetSearch = require('./datasets/datasets-search.jsx');
 const CreateDataset = require('./datasets/create-dataset.jsx');
 const EditDataset = require('./datasets/edit-dataset.jsx');
 const DatasetView = require('./datasets/dataset-view.jsx');

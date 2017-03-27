@@ -42,7 +42,7 @@ class Actions {
                         window.location.href = '/admin';
                     }
                     else {
-                        window.location.href = '/account';
+                        window.location.href = '/sites';
                     }
                 }
             }

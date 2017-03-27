@@ -29,7 +29,7 @@ internals.applyRoutes = function (server, next) {
                     return reply.redirect('/admin');
                 }
 
-                return reply.redirect('/account');
+                return reply.redirect('/sites');
             }
 
             const response = reply.view('login/index');
