@@ -60,7 +60,6 @@ Site data will be stored in JSON files.
  * Basic user registration and auth
  * Sites and datasets storage and admin
  * Dashboard for sites
- * 
  
 ### 0.0.2 (Current)
 
