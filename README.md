@@ -88,3 +88,7 @@ Site data will be stored in JSON files.
 * Catch up with tests and linting
 * Add cucumber
 * Add site editing capability
+
+### 0.0.6
+ * Integrate CARTO for datastore
+ * Data previews
