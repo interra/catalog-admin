@@ -1,0 +1,30 @@
+title: Datasets
+description: A simple dataset.
+type: object
+required:
+- title
+properties:
+  title:
+    type: string
+    title: Title
+  description:
+    type: string
+    title: Description
+  organization:
+    type: referenced
+    target: organizations
+    title: Organization
+  resources:
+    type: array
+    title: Resources
+    items:
+    - type: string
+      title: Title
+    - type: string
+      title: URI
+    - type: string
+      titile: Type
+      enum:
+      - csv
+      - html
+      - xls

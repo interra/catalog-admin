@@ -1,0 +1,18 @@
+title: Organization
+description: A simple organization.
+type: object
+required:
+- title
+properties:
+  title:
+    type: string
+    title: Title
+  description:
+    type: string
+    title: Description
+  datasets:
+    type: array
+    title: Datasets
+    items:
+      type: string
+      title: Datatset

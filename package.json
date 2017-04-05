@@ -1,6 +1,6 @@
 {
   "name": "interra-admin",
-  "version": "0.1.0",
+  "version": "0.0.2",
   "description": "Admin component for Interra Data",
   "main": "index.js",
   "scripts": {
@@ -34,6 +34,7 @@
     "hoek": "4.x.x",
     "inert": "4.x.x",
     "joi": "9.x.x",
+    "react-jsonschema-form": "0.45.0",
     "mongo-models": "1.x.x",
     "mongodb": "2.x.x",
     "node-uuid": "1.4.7",

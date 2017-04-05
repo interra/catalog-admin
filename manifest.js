@@ -81,6 +81,9 @@ const manifest = {
             }
         },
         {
+            plugin: './server/models/schema'
+        },
+        {
             plugin: './server/auth'
         },
         {
@@ -136,6 +139,12 @@ const manifest = {
         },
         {
             plugin: './server/api/logout',
+            options: {
+                routes: { prefix: '/api' }
+            }
+        },
+        {
+            plugin: './server/api/schemas',
             options: {
                 routes: { prefix: '/api' }
             }
