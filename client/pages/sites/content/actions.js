@@ -18,6 +18,17 @@ class Actions {
         );
     }
 
+    static getCollectionSchema(schema, collection) {
+
+        ApiActions.get(
+            `/api/schemas/${schema}/${collection}`,
+            undefined,
+            Store,
+            Constants.GET_COLLECTION_SCHEMA,
+            Constants.GET_COLLECTION_SCHEMA_RESPONSE
+        );
+    }
+
     static getDataset(siteId,id) {
 
         ApiActions.get(

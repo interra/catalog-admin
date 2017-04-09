@@ -100,6 +100,7 @@ internals.applyRoutes = function (server, next) {
                 payload: {
                     _id: Joi.string().required(),
                     name: Joi.string().required(),
+                    schema: Joi.string().required(),
                     description: Joi.string().required(),
                     users: Joi.array()
                 }
@@ -146,6 +147,7 @@ internals.applyRoutes = function (server, next) {
             validate: {
                 payload: {
                     name: Joi.string().required(),
+                    schema: Joi.string().required(),
                     description: Joi.string().required(),
                     users: Joi.array().items()
                 }
@@ -157,6 +159,7 @@ internals.applyRoutes = function (server, next) {
             const update = {
                 $set: {
                     name: request.payload.name,
+                    schema: request.payload.schema,
                     description: request.payload.description,
                     users: request.payload.users
                 }

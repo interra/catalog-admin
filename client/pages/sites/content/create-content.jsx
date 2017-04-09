@@ -12,6 +12,11 @@ class CreateDataset extends React.Component {
 
         this.state = {};
 
+        // 1. Add flag for not-checked-type
+        // 2. If type checked and not valid then error message
+        //    Maybe consider doing this on the server
+        //
+
         Actions.getUser();
         Actions.getSite(props.params.id);
         this.state = Store.getState();
@@ -42,6 +47,11 @@ class CreateDataset extends React.Component {
     onStoreChange() {
 
         this.setState(Store.getState());
+
+        if (this.state.site.hydrated && !this.state.collectionSchema.requested) {
+            Actions.getCollectionSchema(this.state.site.schema,this.props.params.collection);
+        }
+
     }
 
     render() {
@@ -53,7 +63,7 @@ class CreateDataset extends React.Component {
               </div>
               <div className="col-sm-10 center">
                   <h1>Create Dataset</h1>
-                  <DatasetForm user={this.state.user} site={this.state.site} dataset={this.state.dataset} />
+                  <DatasetForm user={this.state.user} site={this.state.site} dataset={this.state.dataset} schema={this.state.collectionSchema}/>
               </div>
           </section>
         );

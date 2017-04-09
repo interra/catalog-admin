@@ -39,6 +39,7 @@ const reducer = function (state = initialState, action) {
             help: validation.help,
             name: action.response.name,
             slug: action.response._id,
+            schema: action.response.schema,
             description: action.response.description
         });
     }
@@ -48,6 +49,7 @@ const reducer = function (state = initialState, action) {
             loading: true,
             name: action.request.data.name,
             slug: action.request.data._id,
+            schema: action.response.data.schema,
             description: action.request.data.description
         });
     }
@@ -77,6 +79,7 @@ const reducer = function (state = initialState, action) {
         return ObjectAssign({}, state, {
             loading: true,
             name: action.request.data.name,
+            schema: action.request.data.schema,
             slug: action.request.data._id,
             description: action.request.data.description
         });

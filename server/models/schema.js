@@ -5,6 +5,8 @@ const Joi = require('joi');
 const MongoModels = require('mongo-models');
 const Uuid = require('node-uuid');
 const fs = require('fs');
+const YAML = require('yamljs');
+
 
 // collections listed in config.yml
 // config.yml
@@ -26,39 +28,34 @@ class Schema {
 
   constructor(name) {
     this.name = name;
+    this.dir = "./schemas/" + name + "/";
+
   }
 
-  collections(callback) {
-    const config = this.getConfig(function (err, data) {
-      if (err) {
-        return callback(err);
-      }
-      return callback(data);
+  uischema(callback) {
+    const configFile = this.dir + "UISchema.yml";
+    YAML.load(configFile, function (data) {
+        return callback(null, data);
     });
-
-    // look through yml
-    //
-
-
   }
 
   collection(collection, callback) {
-
+      const collectionFile = this.dir + collection + ".yml";
+      YAML.load(collectionFile, function (data) {
+          if (data) {
+            return callback(null, data);
+          }
+          else {
+            return callback("Colection not found");
+          }
+      });
   }
 
-  getConfig(callback) {
-    const dir = "./schemas/" + this.name;
-    const configFile = dir + "/config.yml";
-    fs.readFile(dir, function (err, data) {
-
-      if (err) {
-        return callback(err);
-      }
-
-      return callback(data);
-
-    });
-
+  config(callback) {
+      const configFile = this.dir + "config.yml";
+      YAML.load(configFile, function (data) {
+          return callback(null, data);
+      });
   }
 
   list(callback) {
@@ -72,10 +69,11 @@ class Schema {
 }
 
 Schema.register = function (server, options, next) {
-     next();
- }
- 
-Schema.register.attributes = {
-  "name": "schema"
+    next();
 }
+
+Schema.register.attributes = {
+    "name": "schema"
+}
+
 module.exports = Schema;

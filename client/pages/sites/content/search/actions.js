@@ -39,6 +39,19 @@ class Actions {
 
         window.scrollTo(0, 0);
     }
+
+
+    static getCollections(schema) {
+        console.log(schema);
+
+        ApiActions.get(
+            `/api/schemas/${schema}`,
+            undefined,
+            Store,
+            Constants.GET_COLLECTIONS,
+            Constants.GET_COLLECTIONS_RESPONSE
+        );
+    }
 }
 
 

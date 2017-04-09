@@ -23,7 +23,7 @@ properties:
     - type: string
       title: URI
     - type: string
-      titile: Type
+      title: Type
       enum:
       - csv
       - html

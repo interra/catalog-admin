@@ -3,6 +3,7 @@ const Actions = require('./actions');
 const Alert = require('../../components/alert.jsx');
 const Button = require('../../components/form/button.jsx');
 const ControlGroup = require('../../components/form/control-group.jsx');
+const SelectControl = require('../../components/form/select-control.jsx');
 const LinkState = require('../../helpers/link-state');
 const React = require('react');
 const Spinner = require('../../components/form/spinner.jsx');
@@ -33,6 +34,7 @@ class SitesForm extends React.Component {
         this.state = {
             name: props.name,
             slug: props.slug,
+            schema: props.schema,
             description: props.description
         };
 
@@ -60,6 +62,7 @@ class SitesForm extends React.Component {
       this.setState({
           name: nextProps.name,
           slug: nextProps.slug,
+          schema: nextProps.schema,
           description: nextProps.description
       });
     }
@@ -74,6 +77,7 @@ class SitesForm extends React.Component {
             Actions.saveSite({
                 name: this.state.name,
                 _id: this.state.slug,
+                schema: this.state.schema,
                 users: [this.props.user.id],
                 description: this.state.description
             });
@@ -82,6 +86,7 @@ class SitesForm extends React.Component {
             Actions.updateSite(this.state.slug, {
               name: this.state.name,
               users: [this.props.user.id],
+              schema: this.state.schema,
               description: this.state.description
             })
 
@@ -156,6 +161,18 @@ class SitesForm extends React.Component {
                         help={this.props.help['description']}
                         disabled={this.props.loading}
                     />
+                    <SelectControl
+                        name="schema"
+                        label="Schema"
+                        value={this.state.schema}
+                        onChange={LinkState.bind(this)}
+                        disabled={this.props.loading}>
+
+                        <option value="simple">Simple</option>
+                        <option value="pod">Project Open Data</option>
+                        <option value="datapackages">Data Packages</option>
+                    </SelectControl>
+
                     <ControlGroup hideLabel={true} hideHelp={true}>
                         <Button
                             type="submit"
