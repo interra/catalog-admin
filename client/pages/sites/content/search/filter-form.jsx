@@ -4,7 +4,6 @@ const React = require('react');
 const SelectControl = require('../../../../components/form/select-control.jsx');
 const TextControl = require('../../../../components/form/text-control.jsx');
 
-
 const propTypes = {
     linkInputState: React.PropTypes.func,
     linkSelectState: React.PropTypes.func,
@@ -12,7 +11,7 @@ const propTypes = {
     state: React.PropTypes.object
 };
 const defaultValues = {
-    name: '',
+    title: '',
     sort: '_id',
     limit: '20',
     page: '1'
@@ -26,9 +25,9 @@ class FilterForm extends React.Component {
             <div className="row">
                 <div className="col-sm-4">
                     <TextControl
-                        name="name"
+                        name="title"
                         label="Name search"
-                        value={this.props.state.name}
+                        value={this.props.state.title}
                         onChange={this.props.linkInputState}
                         disabled={this.props.loading}
                     />
@@ -43,8 +42,8 @@ class FilterForm extends React.Component {
 
                         <option value="_id">id &#9650;</option>
                         <option value="-_id">id &#9660;</option>
-                        <option value="name">name &#9650;</option>
-                        <option value="-name">name &#9660;</option>
+                        <option value="title">title &#9650;</option>
+                        <option value="-title">title &#9660;</option>
                     </SelectControl>
                 </div>
                 <div className="col-sm-4">

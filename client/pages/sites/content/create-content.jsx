@@ -20,7 +20,7 @@ class CreateDataset extends React.Component {
         Actions.getUser();
         Actions.getSite(props.params.id);
         this.state = Store.getState();
-        this.state.dataset = {
+        this.state.content = {
           // We are loading the form from scratch so no data lookup.
           hydrated: true,
           loading: false,
@@ -30,6 +30,10 @@ class CreateDataset extends React.Component {
           hasError: {},
           help: {},
         }
+        this.state.collectionSchema.schema = {};
+        this.state.collectionSchema.requested = false;
+        this.state.collectionSchema.schema.title = '';
+
     }
 
     componentDidMount() {
@@ -62,8 +66,8 @@ class CreateDataset extends React.Component {
                   <Sidebar name={this.state.site.name} id={this.props.params.id} location={this.props.location} />
               </div>
               <div className="col-sm-10 center">
-                  <h1>Create Dataset</h1>
-                  <DatasetForm user={this.state.user} site={this.state.site} dataset={this.state.dataset} schema={this.state.collectionSchema}/>
+                  <h1>Create {this.state.collectionSchema.schema.title}</h1>
+                  <DatasetForm user={this.state.user} site={this.state.site} content={this.state.content} schema={this.state.collectionSchema}/>
               </div>
           </section>
         );

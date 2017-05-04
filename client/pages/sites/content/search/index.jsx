@@ -58,6 +58,7 @@ class DatasetSearchPage extends React.Component {
         this.setState(Store.getState());
 
         if (this.state.site.hydrated && !this.state.collections.requested) {
+            console.log("STATE IS GREAT", this.state);
             Actions.getCollections(this.state.site.schema);
         }
 
@@ -85,7 +86,9 @@ class DatasetSearchPage extends React.Component {
 
 
     render() {
-        let createDataset = "/sites/" + this.state.site.slug + "/datasets/new";
+        let createContent = "/sites/" + this.state.site.slug + "/content/new";
+
+        console.log(this.state);
 
 
         return (
@@ -94,7 +97,7 @@ class DatasetSearchPage extends React.Component {
                     <Sidebar name={this.state.site.name} id={this.props.params.id} location={this.props.location} />
                 </div>
                 <div className="col-sm-10 center">
-                    <h1>Datasets</h1>
+                    <h1>Content</h1>
                       <div className="btn-group" role="group">
                           <button type="button" className="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                               Create New

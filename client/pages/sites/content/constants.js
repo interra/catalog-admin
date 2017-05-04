@@ -11,6 +11,8 @@ module.exports = FluxConstant.set([
     'GET_USER_RESPONSE',
     'GET_SITE',
     'GET_SITE_RESPONSE',
+    'GET_CONTENT',
+    'GET_CONTENT_RESPONSE',
     'GET_DATASETS',
     'GET_DATASETS_RESPONSE',
     'SAVE_DATASET',

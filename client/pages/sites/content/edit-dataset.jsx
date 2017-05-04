@@ -14,13 +14,16 @@ class EditSite extends React.Component {
     constructor(props) {
         super(props);
 
-
         Actions.getSite(props.params.id);
         Actions.getUser();
-        Actions.getDataset(props.params.id, props.params.datasetId);
+        Actions.getContent(props.params.id, props.params.collection, props.params.contentId);
         this.state = Store.getState();
-        this.state.dataset.redirect = false;
-        this.state.dataset.proc = "edit";
+        this.state.content.redirect = false;
+        this.state.content.proc = "edit";
+        this.state.collectionSchema.schema = {};
+        this.state.collectionSchema.requested = false;
+        this.state.content.formData = {type:''};
+
     }
     componentDidMount() {
 
@@ -30,12 +33,16 @@ class EditSite extends React.Component {
     componentWillUnmount() {
         // Don't show success alert if leaving page.
         this.state.site.showSaveSuccess = false;
+
         this.unsubscribeStore();
     }
 
     onStoreChange() {
 
         this.setState(Store.getState());
+        if (this.state.site.hydrated && !this.state.collectionSchema.requested) {
+            Actions.getCollectionSchema(this.state.site.schema,this.props.params.collection);
+        }
     }
 
     render() {
@@ -46,8 +53,8 @@ class EditSite extends React.Component {
                     <Sidebar name={this.state.site.name} id={this.props.params.id} location={this.props.location} />
                 </div>
                 <div className="col-sm-10 center">
-                    <h1>Edit Dataset</h1>
-                    <DatasetForm user={this.state.user} site={this.state.site} dataset={this.state.dataset} />
+                    <h1>Edit {this.state.content.formData.type}</h1>
+                    <DatasetForm user={this.state.user} site={this.state.site} formData={this.state.formData} content={this.state.content} schema={this.state.collectionSchema}/>
                     <DeleteForm
                         {...this.state.delete}
                         action={Actions.delete.bind(Actions, this.props.params.id)}

@@ -12,21 +12,22 @@ const initialState = {
     proc: "edit",
     hasError: {},
     help: {},
-    name: "",
-    slug: "",
-    description: ""
+    formData: ""
 };
 const reducer = function (state = initialState, action) {
+    console.log("action", action);
 
-    if (action.type === Constants.GET_DATASET) {
+    if (action.type === Constants.GET_CONTENT) {
         return ObjectAssign({}, state, {
             loading: true,
             hydrated: false
         });
     }
 
-    if (action.type === Constants.GET_DATASET_RESPONSE) {
+    if (action.type === Constants.GET_CONTENT_RESPONSE) {
         const validation = ParseValidation(action.response);
+
+        console.log("WEEE HAVE THE CONTENT", action.response);
 
         return ObjectAssign({}, state, {
             loading: false,
@@ -34,17 +35,15 @@ const reducer = function (state = initialState, action) {
             error: validation.error,
             hasError: validation.hasError,
             help: validation.help,
-            name: action.response.name,
-            slug: action.response._id,
-            description: action.response.description
+            formData: action.response
         });
     }
 
     if (action.type === Constants.SAVE_DATASET) {
         return ObjectAssign({}, state, {
             loading: true,
-            name: action.request.data.name,
-            slug: action.request.data._id,
+            title: action.request.data.title,
+            identifier: action.request.data.identifier,
             description: action.request.data.description
         });
     }
@@ -73,8 +72,8 @@ const reducer = function (state = initialState, action) {
 
         return ObjectAssign({}, state, {
             loading: true,
-            name: action.request.data.name,
-            slug: action.request.data._id,
+            title: action.request.data.name,
+            identifier: action.request.data.identifier,
             description: action.request.data.description
         });
     }

@@ -22,7 +22,7 @@ class Actions {
     static getResults(siteId, data) {
 
         ApiActions.get(
-            `/api/sites/${siteId}/datasets`,
+            `/api/sites/${siteId}/contents`,
             data,
             Store,
             Constants.GET_RESULTS,
@@ -33,7 +33,7 @@ class Actions {
     static changeSearchQuery(id, data) {
 
         ReactRouter.browserHistory.push({
-            pathname: `/sites/${id}/datasets`,
+            pathname: `/sites/${id}/content`,
             query: data
         });
 
@@ -42,7 +42,7 @@ class Actions {
 
 
     static getCollections(schema) {
-        console.log(schema);
+        console.log("schema!!!!", schema);
 
         ApiActions.get(
             `/api/schemas/${schema}`,

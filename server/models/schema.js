@@ -39,10 +39,28 @@ class Schema {
     });
   }
 
+  async addId(data) {
+    data.properties._id = {
+      'type': 'string',
+      'description': "Unique Identifier for content",
+      'title': 'Identifier'
+    }
+    return data;
+  }
+
   collection(collection, callback) {
       const collectionFile = this.dir + collection + ".yml";
       YAML.load(collectionFile, function (data) {
           if (data) {
+            // Need to add Identifier if not specified.
+            if (typeof(data.properties.identifier) === undefined) {
+              data.properties._id = {
+                'type': 'string',
+                'description': "Unique identifier.",
+                'title': 'Identifier'
+              }
+            }
+
             return callback(null, data);
           }
           else {

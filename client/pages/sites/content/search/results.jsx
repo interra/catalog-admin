@@ -19,13 +19,14 @@ class Results extends React.Component {
                     <td>
                         <Link
                             className="btn btn-default btn-sm"
-                            to={`/sites/${record.siteId}/datasets/${record._id}/edit`}>
+                            to={`/sites/${record.siteId}/${record.type}/${record.identifier}/edit`}>
 
                             Edit
                         </Link>
                     </td>
-                    <td>{record.name}</td>
-                    <td className="nowrap">{record._id}</td>
+                    <td>{record.title}</td>
+                    <td>{record.type}</td>
+                    <td className="nowrap">{record.identifier}</td>
                 </tr>
             );
         });
@@ -36,8 +37,9 @@ class Results extends React.Component {
                     <thead>
                         <tr>
                             <th></th>
-                            <th className="stretch">name</th>
-                            <th>id</th>
+                            <th className="stretch">title</th>
+                            <th>type</th>
+                            <th>identifier</th>
                         </tr>
                     </thead>
                     <tbody>

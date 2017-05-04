@@ -19,6 +19,7 @@ class CreateSite extends React.Component {
           loading: false,
           proc: "new",
           showSaveSuccess: false,
+          schema: "simple",
           error: undefined,
           hasError: {},
           help: {},

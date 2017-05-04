@@ -70,7 +70,7 @@ const manifest = {
                         AdminGroup: './server/models/admin-group',
                         Admin: './server/models/admin',
                         AuthAttempt: './server/models/auth-attempt',
-                        Dataset: './server/models/dataset',
+                        Content: './server/models/content',
                         Session: './server/models/session',
                         Site: './server/models/site',
                         Status: './server/models/status',

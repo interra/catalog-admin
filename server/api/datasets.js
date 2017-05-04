@@ -3,18 +3,20 @@ const Async = require('async');
 const Boom = require('boom');
 const EscapeRegExp = require('escape-string-regexp');
 const Joi = require('joi');
-
+const Config = require('../../config');
+const Storage = require('../models/content');
 
 const internals = {};
 
 
 internals.applyRoutes = function (server, next) {
 
-    const Dataset = server.plugins['hapi-mongo-models'].Dataset;
+    const Dataset = server.plugins['hapi-mongo-models'].Content;
 
     server.route({
         method: 'GET',
-        path: '/sites/{siteId}/datasets',
+        // 'sites/{sideId}/contents/{collection}'
+        path: '/sites/{siteId}/contents',
         config: {
             auth: {
                 strategy: 'session',
@@ -22,7 +24,7 @@ internals.applyRoutes = function (server, next) {
             },
             validate: {
                 query: {
-                    name: Joi.string().allow(''),
+                    title: Joi.string().allow(''),
                     fields: Joi.string(),
                     sort: Joi.string().default('_id'),
                     limit: Joi.number().default(20),
@@ -33,16 +35,21 @@ internals.applyRoutes = function (server, next) {
         handler: function (request, reply) {
 
             const query = {};
-            if (request.query.name) {
-                query.name = new RegExp('^.*?' + EscapeRegExp(request.query.name) + '.*$', 'i');
+            if (request.query.title) {
+                query.title = new RegExp('^.*?' + EscapeRegExp(request.query.title) + '.*$', 'i');
             }
-            query.siteId = request.params.siteId;
+
             const fields = request.query.fields;
             const sort = request.query.sort;
             const limit = request.query.limit;
             const page = request.query.page;
+            const store = Config.get('/storage');
 
-            Dataset.pagedFind(query, fields, sort, limit, page, (err, results) => {
+            const storage = new Storage['Mongo'](request.params.siteId);
+
+            storage.pagedFind(query, fields, sort, limit, page, (err, results) => {
+                console.log(results);
+                console.log(err);
 
                 if (err) {
                     return reply(err);
@@ -50,12 +57,13 @@ internals.applyRoutes = function (server, next) {
 
                 reply(results);
             });
+
         }
     });
 
     server.route({
         method: 'GET',
-        path: '/sites/{siteId}/datasets/count',
+        path: '/sites/{siteId}/contents/count',
         config: {
             auth: {
                 strategy: 'session',
@@ -63,16 +71,21 @@ internals.applyRoutes = function (server, next) {
             },
             validate: {
                 query: {
-                    siteId: Joi.string().default('')
+                    type: Joi.string().default('')
                 }
             }
         },
         handler: function (request, reply) {
 
-            const query = {};
-            query.siteId = request.params.siteId;
+            const store = Config.get('/storage');
+            const storage = new Storage['Mongo'](request.params.siteId);
+            const type = '';
 
-            Dataset.count(query, (err, results) => {
+//            if (typeof(request.payload.type) !== 'undefined') {
+  //              const type = request.payload.type;
+    //        }
+
+            storage.count(type, (err, results) => {
 
                 if (err) {
                     return reply(err);
@@ -86,7 +99,7 @@ internals.applyRoutes = function (server, next) {
 
     server.route({
         method: 'GET',
-        path: '/sites/{siteId}/datasets/{id}',
+        path: '/sites/{siteId}/contents/{type}/{id}',
         config: {
             auth: {
                 strategy: 'session',
@@ -96,8 +109,11 @@ internals.applyRoutes = function (server, next) {
         handler: function (request, reply) {
 
             const query = { '_id': request.params.id, 'siteId': request.params.siteId };
-
-            Dataset.findOne(query, (err, dataset) => {
+            const store = Config.get('/storage');
+            const identifier = request.params.id;
+            const type = request.params.type;
+            const storage = new Storage['Mongo'](request.params.siteId);
+            storage.findByIdentifier(identifier, type, (err, dataset) => {
 
                 if (err) {
                     return reply(err);
@@ -115,7 +131,7 @@ internals.applyRoutes = function (server, next) {
 
     server.route({
         method: 'POST',
-        path: '/sites/{siteId}/datasets',
+        path: '/sites/{siteId}/contents',
         config: {
             auth: {
                 strategy: 'session',
@@ -123,33 +139,40 @@ internals.applyRoutes = function (server, next) {
             },
             validate: {
                 payload: {
-                    _id: Joi.string().required(),
-                    name: Joi.string().required(),
-                    description: Joi.string().required(),
-                    users: Joi.array()
+                    collection: Joi.string().required(),
+                    content: Joi.object().required()
                 }
             }
         },
         handler: function (request, reply) {
+            console.log("POSTED AND BOASTED");
 
-            const name = request.payload.name;
-            const description = request.payload.description;
-            const users = request.payload.users;
             const siteId = request.params.siteId;
 
-            const query = { '_id': request.payload._id };
+            const content = request.payload.content;
+            const type = request.payload.collection;
+            console.log(request.payload);
 
-            Dataset.findOne(query, (err, dataset) => {
+            if (typeof(content.identifier) === undefined) {
+                reply(Boom.badRequest('identifier is required'));
+            }
 
-                if (dataset) {
-                    return reply(Boom.conflict('_id already exists.'));
+            const store = Config.get('/storage');
+            const storage = new Storage['Mongo'](siteId);
+
+            storage.findByIdentifier(content.identifier, type, (err, item) => {
+
+                if (item) {
+                    return reply(Boom.conflict('identifier already exists.'));
                 }
 
                 if (err) {
                     return reply(err);
                 }
 
-                Dataset.create(request.payload._id, name, siteId, description, users, (err, result) => {
+                console.log("CONTENT", content);
+
+                storage.insertOne(content.identifier, type, content, (err, result) => {
 
                     if (err) {
                         return reply(err);
@@ -163,7 +186,7 @@ internals.applyRoutes = function (server, next) {
 
     server.route({
         method: 'PUT',
-        path: '/sites/{siteId}/datasets/{id}',
+        path: '/sites/{siteId}/contents/{id}',
         config: {
             auth: {
                 strategy: 'session',
@@ -171,37 +194,31 @@ internals.applyRoutes = function (server, next) {
             },
             validate: {
                 payload: {
-                    name: Joi.string().required(),
-                    description: Joi.string().required(),
-                    users: Joi.array().items()
+                  collection: Joi.string().required(),
+                  content: Joi.object().required()
                 }
             }
         },
         handler: function (request, reply) {
 
-            const id = request.params.id;
-            const update = {
-                $set: {
-                    name: request.payload.name,
-                    description: request.payload.description,
-                    users: request.payload.users,
-                    siteId: request.params.siteId
-                }
-            };
+            const identifier = request.params.id;
+            const update = request.payload.content;
+            const type = request.payload.collection;
 
-            const query = { '_id': id };
+            const store = Config.get('/storage');
+            const storage = new Storage['Mongo'](request.params.siteId);
 
-            Dataset.findOneAndUpdate(query, update, (err, dataset) => {
+            storage.findOneAndUpdate(identifier, type, update, (err, content) => {
 
                 if (err) {
                     return reply(err);
                 }
 
-                if (!dataset) {
+                if (!content) {
                     return reply(Boom.notFound('Document not found.'));
                 }
 
-                reply(dataset);
+                reply(content);
             });
         }
     });
@@ -224,8 +241,10 @@ internals.applyRoutes = function (server, next) {
                 method: function (request, reply) {
 
                     const query = { '_id': request.params.id };
+                    const store = Config.get('/storage');
+                    const storage = new Storage['Mongo'](store.FileStorageDir, request.params.siteId);
 
-                    Dataset.findOne(query, (err, dataset) => {
+                    storage.findOne(query, (err, dataset) => {
 
                         if (err) {
                             return reply(err);
@@ -254,8 +273,10 @@ internals.applyRoutes = function (server, next) {
                     };
 
                     const query = { '_id': id };
+                    const store = Config.get('/storage');
+                    const storage = new Storage['Mongo'](store.FileStorageDir, request.params.siteId);
 
-                    Dataset.findOneAndUpdate(query, update, done);
+                    storage.findOneAndUpdate(query, update, done);
                 }
             }, (err, results) => {
 
@@ -280,8 +301,10 @@ internals.applyRoutes = function (server, next) {
         handler: function (request, reply) {
 
             const query = { '_id': request.params.id };
+            const store = Config.get('/storage');
+            const storage = new Storage['Mongo'](store.FileStorageDir, request.params.siteId);
 
-            Dataset.findOneAndDelete(query, (err, dataset) => {
+            storage.findOneAndDelete(query, (err, dataset) => {
 
                 if (err) {
                     return reply(err);

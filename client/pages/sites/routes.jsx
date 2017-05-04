@@ -28,8 +28,8 @@ const Routes = (
             <Route path=":id/edit" component={EditSite} />
             <Route path=":id/content" component={DatasetSearchPage} />
             <Route path=":id/:collection/new" component={CreateContent} />
-            <Route path=":id/:collection/:datasetId" component={DatasetView} />
-            <Route path=":id/:collection/:datasetId/edit" component={EditDataset} />
+            <Route path=":id/:collection/:contentId" component={DatasetView} />
+            <Route path=":id/:collection/:contentId/edit" component={EditDataset} />
             <Route path="*" component={NotFound} />
         </Route>
         <Route path="*" component={NotFound} />

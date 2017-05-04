@@ -22,6 +22,7 @@ const propTypes = {
     help: React.PropTypes.object,
     slug: React.PropTypes.string,
     name: React.PropTypes.string,
+    schema: React.PropTypes.string,
     slugSuccess: React.PropTypes.bool,
     description: React.PropTypes.string
 };
@@ -30,6 +31,7 @@ class SitesForm extends React.Component {
     constructor(props) {
 
         super(props);
+        console.log(props);
 
         this.state = {
             name: props.name,
@@ -59,6 +61,8 @@ class SitesForm extends React.Component {
 
     componentWillReceiveProps(nextProps) {
 
+      console.log(nextProps);
+
       this.setState({
           name: nextProps.name,
           slug: nextProps.slug,
@@ -73,6 +77,7 @@ class SitesForm extends React.Component {
         event.stopPropagation();
 
         if (this.props.proc == "new") {
+            console.log("state", this.state);
 
             Actions.saveSite({
                 name: this.state.name,
@@ -128,6 +133,8 @@ class SitesForm extends React.Component {
         let slugDisabled = this.props.proc == "edit" ? true : false;
         let buttonDescription = this.props.proc == "edit" ? "Edit site" : "Create Site";
 
+        console.log('STATTTEE', this.state);
+
         return (
             <form onSubmit={this.handleSubmit.bind(this)}>
                 <fieldset>
@@ -172,7 +179,16 @@ class SitesForm extends React.Component {
                         <option value="pod">Project Open Data</option>
                         <option value="datapackages">Data Packages</option>
                     </SelectControl>
+                    <SelectControl
+                        name="storage"
+                        label="Storage"
+                        value={this.state.storage}
+                        onChange={LinkState.bind(this)}
+                        disabled={this.props.loading}>
 
+                        <option value="MongoStorage">MongoDB</option>
+                        <option value="FileStorage">File</option>
+                    </SelectControl>
                     <ControlGroup hideLabel={true} hideHelp={true}>
                         <Button
                             type="submit"

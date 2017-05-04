@@ -14,7 +14,8 @@ class ViewSite extends React.Component {
         super(props);
 
         Actions.getSite(props.params.id);
-        Actions.getDataset(props.params.id, props.params.datasetId);
+        console.log(props.params);
+        Actions.getContent(props.params.id, props.params.collection, props.params.contentId);
 
         this.state = Store.getState();
     }
@@ -66,6 +67,7 @@ class ViewSite extends React.Component {
                 </section>
             );
         }
+        console.log(this.state);
 
         return (
             <section className="container site-admin">
@@ -74,8 +76,8 @@ class ViewSite extends React.Component {
                 </div>
                 <div className="col-sm-10 center">
                     <div className="row">
-                        <h1>{this.state.dataset.name}</h1>
-                        <p>{this.state.dataset.description}</p>
+                        <h1>{this.state.content.formData.title}</h1>
+                        <p>{this.state.content.formData.description}</p>
                     </div>
 
                 </div>

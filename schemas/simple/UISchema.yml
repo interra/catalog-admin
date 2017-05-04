@@ -1,3 +1,5 @@
 ---
 description:
   ui:widget: textarea
+organization:
+  ui:widget: referenced

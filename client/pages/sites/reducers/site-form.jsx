@@ -13,6 +13,7 @@ const initialState = {
     proc: "edit",
     hasError: {},
     help: {},
+    schema: "simple",
     name: "",
     slug: "",
     description: ""
@@ -45,16 +46,20 @@ const reducer = function (state = initialState, action) {
     }
 
     if (action.type === Constants.SAVE_SITE) {
+        console.log("aaaaa". action);
         return ObjectAssign({}, state, {
             loading: true,
             name: action.request.data.name,
             slug: action.request.data._id,
-            schema: action.response.data.schema,
+            schema: action.request.data.schema,
             description: action.request.data.description
         });
     }
 
     if (action.type === Constants.SAVE_SITE_RESPONSE) {
+
+        console.log(action.response);
+
 
         const validation = ParseValidation(action.response);
         const stateUpdates = {

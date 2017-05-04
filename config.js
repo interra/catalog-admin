@@ -24,8 +24,12 @@ const config = {
     baseUrl: {
         $filter: 'env',
         $meta: 'values should not end in "/"',
-        production: 'https://getaqua.herokuapp.com',
+        production: 'https://interra.herokuapp.com',
         $default: 'http://127.0.0.1:8000'
+    },
+    storage: {
+        FileStorageDir: "data_files",
+        default: "FileStorage"
     },
     authAttempts: {
         forIp: 50,
