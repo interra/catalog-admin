@@ -61,12 +61,6 @@ internals.applyStrategy = function (server, next) {
                         return done();
                     }
 
-                    // This is a hack to give logged in users the "user" role for auth scope.
-                    // This already exists implicitly so maybe don't need it.
-                    if (!results.user.roles.admin) {
-                        results.user.roles.user = true;
-                    }
-
                     const scopes = Object.keys(results.user.roles);
 
                     for (const numb in results.user._sites) {

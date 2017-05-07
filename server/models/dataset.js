@@ -1,6 +1,36 @@
 'use strict';
 const Joi = require('joi');
 const MongoModels = require('mongo-models');
+const fs = require('fs');
+
+class Storage {
+
+  instance($class, $id) {
+      return new $class($id);
+  }
+
+  init() {}
+
+  insert() {}
+
+  insertMany() {}
+
+  update() {}
+
+  delete() {}
+}
+
+// location of data folder
+// site name
+// collection type
+//
+
+class FileStorage extends Storage {
+
+  insert() {
+    console.log("inserting");
+  }
+}
 
 class Dataset extends MongoModels {
     static create(_id, name, siteId, description, users, callback) {
@@ -37,3 +67,8 @@ Dataset.schema = Joi.object().keys({
 });
 
 module.exports = Dataset;
+module.exports = {
+  Storage,
+  Dataset,
+  FileStorage
+};

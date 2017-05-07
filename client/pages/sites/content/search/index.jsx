@@ -85,8 +85,7 @@ class DatasetSearchPage extends React.Component {
 
 
     render() {
-        let createDataset = "/sites/" + this.state.site.slug + "/datasets/new";
-
+        let createContent = "/sites/" + this.state.site.slug + "/content/new";
 
         return (
             <section className="container site-admin">
@@ -94,7 +93,7 @@ class DatasetSearchPage extends React.Component {
                     <Sidebar name={this.state.site.name} id={this.props.params.id} location={this.props.location} />
                 </div>
                 <div className="col-sm-10 center">
-                    <h1>Datasets</h1>
+                    <h1>Content</h1>
                       <div className="btn-group" role="group">
                           <button type="button" className="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                               Create New

@@ -100,7 +100,8 @@ internals.applyRoutes = function (server, next) {
                 payload: {
                     _id: Joi.string().required(),
                     name: Joi.string().required(),
-                    description: Joi.string().required(),
+                    schema: Joi.string().required(),
+                    description: Joi.string(),
                     users: Joi.array()
                 }
             }
@@ -110,6 +111,7 @@ internals.applyRoutes = function (server, next) {
             const name = request.payload.name;
             const description = request.payload.description;
             const users = request.payload.users;
+            const schema = request.payload.schema;
 
             const query = { '_id': request.payload._id };
 
@@ -123,7 +125,7 @@ internals.applyRoutes = function (server, next) {
                     return reply(err);
                 }
 
-                Site.create(request.payload._id, name, description, users, (err, result) => {
+                Site.create(request.payload._id, name, description, users, schema, (err, result) => {
 
                     if (err) {
                         return reply(err);
@@ -146,6 +148,7 @@ internals.applyRoutes = function (server, next) {
             validate: {
                 payload: {
                     name: Joi.string().required(),
+                    schema: Joi.string().required(),
                     description: Joi.string().required(),
                     users: Joi.array().items()
                 }
@@ -157,6 +160,7 @@ internals.applyRoutes = function (server, next) {
             const update = {
                 $set: {
                     name: request.payload.name,
+                    schema: request.payload.schema,
                     description: request.payload.description,
                     users: request.payload.users
                 }

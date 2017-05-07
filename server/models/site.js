@@ -3,11 +3,12 @@ const Joi = require('joi');
 const MongoModels = require('mongo-models');
 
 class Site extends MongoModels {
-    static create(_id, name, description, users, callback) {
+    static create(_id, name, description, users, schema, callback) {
 
         const document = {
             _id,
             description,
+            schema,
             name,
             timeCreated: new Date(),
             users

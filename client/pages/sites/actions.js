@@ -32,7 +32,7 @@ class Actions {
     static getDatasetCount(siteId) {
 
         ApiActions.get(
-            `/api/sites/${siteId}/datasets/count`,
+            `/api/sites/${siteId}/contents/count`,
             undefined,
             Store,
             Constants.GET_COUNT,

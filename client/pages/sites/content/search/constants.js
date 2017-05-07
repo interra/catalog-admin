@@ -9,6 +9,8 @@ module.exports = FluxConstant.set([
     'GET_RESULTS_RESPONSE',
     'GET_SITE',
     'GET_SITE_RESPONSE',
+    'GET_COLLECTIONS',
+    'GET_COLLECTIONS_RESPONSE',
     'HIDE_CREATE_NEW',
     'SHOW_CREATE_NEW'
 ]);

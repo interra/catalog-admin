@@ -18,31 +18,46 @@ class Actions {
         );
     }
 
-    static getDataset(siteId,id) {
+    static getCollectionSchema(schema, collection) {
 
         ApiActions.get(
-            `/api/sites/${siteId}/datasets/${id}`,
+            `/api/schemas/${schema}/${collection}`,
             undefined,
             Store,
-            Constants.GET_DATASET,
-            Constants.GET_DATASET_RESPONSE
+            Constants.GET_COLLECTION_SCHEMA,
+            Constants.GET_COLLECTION_SCHEMA_RESPONSE
+        );
+    }
+
+    static getContent(siteId, type, id) {
+
+        ApiActions.get(
+            `/api/sites/${siteId}/contents/${type}/${id}`,
+            undefined,
+            Store,
+            Constants.GET_CONTENT,
+            Constants.GET_CONTENT_RESPONSE
         );
     }
 
 
-    static saveDataset(siteId, data) {
+    static saveContent(siteId, collection, data) {
+
+        let post = {
+            "collection": collection,
+            "content": data
+        }
 
         ApiActions.post(
-            `/api/sites/${siteId}/datasets`,
-            data,
+            `/api/sites/${siteId}/contents`,
+            post,
             Store,
             Constants.SAVE_DATASET,
             Constants.SAVE_DATASET_RESPONSE,
             (err, response) => {
 
                 if (!err) {
-                    ReactRouter.browserHistory.push('/sites/' + siteId + '/datasets/' + data._id);
-
+                    ReactRouter.browserHistory.push('/sites/' + siteId + '/' + collection + '/' + data.identifier);
                     window.scrollTo(0, 0);
                 }
             }
@@ -51,14 +66,26 @@ class Actions {
 
     }
 
-    static updateDataset(siteId, id, data) {
+    static updateContent(siteId, collection, id, data) {
+        let post = {
+            "collection": collection,
+            "content": data
+        }
 
         ApiActions.put(
-            `/api/sites/${siteId}/datasets/${id}`,
-            data,
+            `/api/sites/${siteId}/contents/${id}`,
+            post,
             Store,
             Constants.UPDATE_DATASET,
-            Constants.UPDATE_DATASET_RESPONSE
+            Constants.UPDATE_DATASET_RESPONSE,
+            (err, response) => {
+
+                if (!err) {
+                    ReactRouter.browserHistory.push('/sites/' + siteId + '/' + collection + '/' + data.identifier);
+                    window.scrollTo(0, 0);
+                }
+            }
+
         );
     }
 

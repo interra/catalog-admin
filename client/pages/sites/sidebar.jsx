@@ -48,7 +48,7 @@ class Sidebar extends React.Component {
 
         let dashboardPath = '/sites/' + this.props.id;
         let editPath = '/sites/' + this.props.id + '/edit';
-        let datasetSearchPath = '/sites/' + this.props.id + '/datasets';
+        let datasetSearchPath = '/sites/' + this.props.id + '/content';
 
         return (
             <div className="sidebar">
