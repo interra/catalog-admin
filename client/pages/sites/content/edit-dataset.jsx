@@ -54,7 +54,13 @@ class EditSite extends React.Component {
                 </div>
                 <div className="col-sm-10 center">
                     <h1>Edit {this.state.content.formData.type}</h1>
-                    <DatasetForm user={this.state.user} site={this.state.site} formData={this.state.formData} content={this.state.content} schema={this.state.collectionSchema}/>
+                    <DatasetForm user={this.state.user}
+                        site={this.state.site}
+                        formData={this.state.formData}
+                        content={this.state.content}
+                        schema={this.state.collectionSchema}
+                        uiSchema={this.state.collectionSchema.uiSchema}
+                        />
                     <DeleteForm
                         {...this.state.delete}
                         action={Actions.delete.bind(Actions, this.props.params.id)}

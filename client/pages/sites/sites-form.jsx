@@ -31,7 +31,6 @@ class SitesForm extends React.Component {
     constructor(props) {
 
         super(props);
-        console.log(props);
 
         this.state = {
             name: props.name,
@@ -61,8 +60,6 @@ class SitesForm extends React.Component {
 
     componentWillReceiveProps(nextProps) {
 
-      console.log(nextProps);
-
       this.setState({
           name: nextProps.name,
           slug: nextProps.slug,
@@ -77,7 +74,6 @@ class SitesForm extends React.Component {
         event.stopPropagation();
 
         if (this.props.proc == "new") {
-            console.log("state", this.state);
 
             Actions.saveSite({
                 name: this.state.name,
@@ -132,8 +128,6 @@ class SitesForm extends React.Component {
         let helpSlug = this.props.help['slug'] ? this.props.help['slug'] : "A unique identifier for your site."
         let slugDisabled = this.props.proc == "edit" ? true : false;
         let buttonDescription = this.props.proc == "edit" ? "Edit site" : "Create Site";
-
-        console.log('STATTTEE', this.state);
 
         return (
             <form onSubmit={this.handleSubmit.bind(this)}>

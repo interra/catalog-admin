@@ -15,7 +15,7 @@ properties:
     type: string
     title: Description
   datasets:
-    type: array
+    type: string
     title: Datasets
     items:
       type: string

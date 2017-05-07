@@ -58,7 +58,6 @@ class DatasetSearchPage extends React.Component {
         this.setState(Store.getState());
 
         if (this.state.site.hydrated && !this.state.collections.requested) {
-            console.log("STATE IS GREAT", this.state);
             Actions.getCollections(this.state.site.schema);
         }
 
@@ -87,9 +86,6 @@ class DatasetSearchPage extends React.Component {
 
     render() {
         let createContent = "/sites/" + this.state.site.slug + "/content/new";
-
-        console.log(this.state);
-
 
         return (
             <section className="container site-admin">

@@ -42,7 +42,6 @@ class Actions {
 
 
     static getCollections(schema) {
-        console.log("schema!!!!", schema);
 
         ApiActions.get(
             `/api/schemas/${schema}`,

@@ -116,9 +116,18 @@ class Mongo extends Storage {
         super(siteId);
     }
 
+    titles(type, callback) {
+        let query = {};
+        if (type) {
+            query = {"type": type};
+        }
+        const projection = {'title' : 1, 'identifier': 1, _id: 0};
+
+        return MongoModels.find(query, projection, callback);
+    }
+
     pagedFind(query, fields, sort, limit, page, callback) {
         query.siteId = this.siteId;
-        console.log("QUUUUUERRRY Paged fiend", query);
 
         return MongoModels.pagedFind(query, fields, sort, limit, page, callback);
     }
@@ -126,16 +135,10 @@ class Mongo extends Storage {
     findByIdentifier(identifier, type, callback) {
         const query = { '_id': this.siteId + '-' + type + '-' +  identifier };
 
-        console.log("QUUUUUERRRY", query);
-
         MongoModels.findOne(query, (err, content) => {
             if (err) {
                 return callback(err);
             }
-
-            // We want to keep this hidden as part of the internal mongo storage.
-//            delete(content._id);
-            console.log(content);
 
             callback(null, content);        }
 
@@ -191,7 +194,6 @@ class Mongo extends Storage {
 
 MongoModels.collection = 'datasets';
 
-//module.exports = Dataset;
 module.exports = {
   Storage,
   Mongo,

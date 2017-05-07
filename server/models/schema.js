@@ -8,22 +8,6 @@ const fs = require('fs');
 const YAML = require('yamljs');
 
 
-// collections listed in config.yml
-// config.yml
-// name:
-// collections:
-//   datasets
-//   resources:
-//     file: distribution.yml
-//   organization
-//
-//
-//
-// create custom widget "referece"
-// when the form is created it grabs the referenced collections for the form
-// when it is saved it saves (the entire reference)
-// it also adds a form for creating a new referenced collection
-
 class Schema {
 
   constructor(name) {
@@ -32,20 +16,33 @@ class Schema {
 
   }
 
-  uischema(callback) {
+  uiSchema(callback) {
     const configFile = this.dir + "UISchema.yml";
     YAML.load(configFile, function (data) {
         return callback(null, data);
     });
   }
 
-  async addId(data) {
-    data.properties._id = {
-      'type': 'string',
-      'description': "Unique Identifier for content",
-      'title': 'Identifier'
-    }
-    return data;
+  collectionAndSchema(collection, callback) {
+      this.collection(collection, (err, list) => {
+
+          if (err) {
+              return callback("Collection not found.");
+          }
+
+          this.uiSchema((err,ui) => {
+              if (err) {
+                  return callback("UIschema not found");
+              }
+              let data = {
+                  schema: list,
+                  uiSchema: ui[collection]
+              }
+              return callback(null,data);
+
+          });
+
+      });
   }
 
   collection(collection, callback) {

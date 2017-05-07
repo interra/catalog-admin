@@ -18,7 +18,6 @@ class EditSite extends React.Component {
         Actions.getUser();
         this.state = Store.getState();
         this.state.site.redirect = false;
-//        this.state.site.schema = 'simple';
         this.state.site.proc = "edit";
     }
     componentDidMount() {
@@ -38,7 +37,6 @@ class EditSite extends React.Component {
     }
 
     render() {
-        console.log(this.state.site);
 
         return (
             <section className="container site-admin">

@@ -8,7 +8,8 @@ const initialState = {
     loading: false,
     requested: false,
     error: undefined,
-    schema: {}
+    schema: {},
+    uiSchema: {}
 };
 const reducer = function (state = initialState, action) {
 
@@ -25,7 +26,8 @@ const reducer = function (state = initialState, action) {
             hydrated: true,
             requested: true,
             loading: false,
-            schema: action.response
+            schema: action.response.schema,
+            uiSchema: action.response.uiSchema
         });
     }
 

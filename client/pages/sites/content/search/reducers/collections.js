@@ -11,7 +11,6 @@ const initialState = {
     collections: [],
 };
 const reducer = function (state = initialState, action) {
-    console.log(action.type);
 
     if (action.type === Constants.GET_COLLECTIONS) {
         return ObjectAssign({}, state, {
@@ -22,7 +21,6 @@ const reducer = function (state = initialState, action) {
     }
 
     if (action.type === Constants.GET_COLLECTIONS_RESPONSE) {
-        console.log(action);
         return ObjectAssign({}, state, {
             hydrated: true,
             requested: true,

@@ -72,7 +72,7 @@ internals.applyRoutes = function (server, next) {
         handler: function (request, reply) {
           const schema = new Schema(request.params.name);
 
-          schema.collection(request.params.collection, (err, list) => {
+          schema.collectionAndSchema(request.params.collection, (err, list) => {
 
               if (err) {
                   return reply(Boom.notFound(err));

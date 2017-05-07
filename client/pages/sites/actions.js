@@ -42,7 +42,6 @@ class Actions {
 
 
     static saveSite(data) {
-        console.log("SIIIIITEEEEE", data);
 
         ApiActions.post(
             '/api/sites',

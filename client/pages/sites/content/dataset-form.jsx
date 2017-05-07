@@ -11,47 +11,8 @@ const TextAreaControl = require('../../../components/form/textarea-control.jsx')
 const Slug = require('slug');
 const Navigatable = require('react-router-component').NavigatableMixin
 const Form = require('react-jsonschema-form').default;
+const Referenced = require('./referenced/index.jsx');
 require('./dataset-form.js');
-
-
-class Referenced extends React.Component {
-  constructor(props) {
-    super(props);
-    //this.state = {props.formData};
-  }
-  // Reference field:
-//
-//1. Add to local components
-//	/client/components/form
-//
-//2. Add
-//	- Actions
-//	- Reducer
-//	- Store
-//	-> Calls content API (/sites/[siteId]/content/[type]
-//	-> Intially just select list
-//  -> Post-MVP add create link
-
-  //
-  //
-
-  onChange(name) {
-    return (event) => {
-      this.setState({
-        [name]: parseFloat(event.target.value)
-      }, () => this.props.onChange(this.state));
-    };
-  }
-
-  render() {
-    return (
-      <div>
-        This will be a select list for referenced collections.
-      </div>
-    );
-  }
-}
-
 
 const propTypes = {
     hydrated: React.PropTypes.bool,
@@ -66,15 +27,6 @@ const propTypes = {
     slugSuccess: React.PropTypes.bool,
     description: React.PropTypes.string
 };
-
-
-// Define the custom field component to use for the root object
-const uiSchema = {"ui:field": "referenced"};
-
-// Define the custom field components to register; here our "geo"
-// custom field component
-const fields = {referenced: Referenced};
-
 
 class DatasetForm extends React.Component {
     constructor(props) {
@@ -106,7 +58,6 @@ class DatasetForm extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log("MAYBE NEW PROPS HERE", nextProps);
         // Don't pass the formData until we have a schema.
         if (nextProps.schema.requested == true && nextProps.schema.loading == false) {
             this.state.formData = nextProps.content.formData;
@@ -115,8 +66,6 @@ class DatasetForm extends React.Component {
     }
 
     handleSubmit(data) {
-        console.log("DATA IS FIRED", data);
-        console.log(this);
 
         // TODO: Add to state.
         let collection = window.location.pathname.split('/')[3];
@@ -136,8 +85,6 @@ class DatasetForm extends React.Component {
 
     onChange (data) {
 
-      console.log("ON CHANGE GETTING FIRED", this.state);
-
       this.setState({"formData": data.formData});
 
 
@@ -146,31 +93,22 @@ class DatasetForm extends React.Component {
 
      };
 
+
+
     render() {
 
-      const uiSchema = {
-        "description": {
-          "ui:widget": "textarea"
-        },
-        "organization": {
-          "ui:field": "referenced"
-        }
-
-      }
-
-      console.log("STATEY MATEY", this.state);
-      console.log("PROPS", this.props);
-
-
+           const widgets = {
+             referenced: Referenced
+           };
 
         const log = (type) => console.log.bind(console, type);
 
         return (
           <Form schema={this.props.schema.schema}
-            uiSchema={uiSchema}
-            fields={fields}
+            uiSchema={this.props.schema.uiSchema}
             formData={this.state.formData}
             onChange={this.onChange.bind(this)}
+            widgets={widgets}
             onSubmit={this.handleSubmit.bind(this)}
             onError={log("errors")} />
 

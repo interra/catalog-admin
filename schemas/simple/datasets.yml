@@ -16,19 +16,23 @@ properties:
     title: Description
   organization:
     type: string
-    target: organizations
     title: Organization
   resources:
     type: array
     title: Resources
     items:
-    - type: string
-      title: Title
-    - type: string
-      title: URI
-    - type: string
-      title: Type
-      enum:
-      - csv
-      - html
-      - xls
+      type: object
+      properties:
+        title:
+          type: string
+          title: Title
+        uri:
+          type: string
+          title: URI
+        type:
+          type: string
+          title: Type
+          enum:
+            - csv
+            - html
+            - xls

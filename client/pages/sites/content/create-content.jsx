@@ -12,11 +12,6 @@ class CreateDataset extends React.Component {
 
         this.state = {};
 
-        // 1. Add flag for not-checked-type
-        // 2. If type checked and not valid then error message
-        //    Maybe consider doing this on the server
-        //
-
         Actions.getUser();
         Actions.getSite(props.params.id);
         this.state = Store.getState();

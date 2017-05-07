@@ -48,8 +48,6 @@ internals.applyRoutes = function (server, next) {
             const storage = new Storage['Mongo'](request.params.siteId);
 
             storage.pagedFind(query, fields, sort, limit, page, (err, results) => {
-                console.log(results);
-                console.log(err);
 
                 if (err) {
                     return reply(err);
@@ -58,6 +56,42 @@ internals.applyRoutes = function (server, next) {
                 reply(results);
             });
 
+        }
+    });
+
+    server.route({
+        method: 'GET',
+        path: '/sites/{siteId}/contents/titles',
+        config: {
+            auth: {
+                strategy: 'session',
+                scope: ['admin','site-{params.siteId}']
+            },
+            validate: {
+                query: {
+                    type: Joi.string().default('')
+                }
+            }
+        },
+        handler: function (request, reply) {
+
+            const store = Config.get('/storage');
+            const storage = new Storage['Mongo'](request.params.siteId);
+            let type = "";
+
+
+            if (typeof(request.query.type) != 'undefined') {
+                  type = request.query.type;
+            }
+
+            storage.titles(type, (err, results) => {
+
+                if (err) {
+                    return reply(err);
+                }
+
+                reply(results);
+            });
         }
     });
 
@@ -145,13 +179,10 @@ internals.applyRoutes = function (server, next) {
             }
         },
         handler: function (request, reply) {
-            console.log("POSTED AND BOASTED");
 
             const siteId = request.params.siteId;
-
             const content = request.payload.content;
             const type = request.payload.collection;
-            console.log(request.payload);
 
             if (typeof(content.identifier) === undefined) {
                 reply(Boom.badRequest('identifier is required'));
@@ -169,8 +200,6 @@ internals.applyRoutes = function (server, next) {
                 if (err) {
                     return reply(err);
                 }
-
-                console.log("CONTENT", content);
 
                 storage.insertOne(content.identifier, type, content, (err, result) => {
 

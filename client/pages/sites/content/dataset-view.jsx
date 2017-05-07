@@ -14,7 +14,6 @@ class ViewSite extends React.Component {
         super(props);
 
         Actions.getSite(props.params.id);
-        console.log(props.params);
         Actions.getContent(props.params.id, props.params.collection, props.params.contentId);
 
         this.state = Store.getState();
@@ -67,7 +66,6 @@ class ViewSite extends React.Component {
                 </section>
             );
         }
-        console.log(this.state);
 
         return (
             <section className="container site-admin">

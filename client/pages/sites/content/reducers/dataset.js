@@ -15,7 +15,6 @@ const initialState = {
     formData: ""
 };
 const reducer = function (state = initialState, action) {
-    console.log("action", action);
 
     if (action.type === Constants.GET_CONTENT) {
         return ObjectAssign({}, state, {
@@ -26,8 +25,6 @@ const reducer = function (state = initialState, action) {
 
     if (action.type === Constants.GET_CONTENT_RESPONSE) {
         const validation = ParseValidation(action.response);
-
-        console.log("WEEE HAVE THE CONTENT", action.response);
 
         return ObjectAssign({}, state, {
             loading: false,

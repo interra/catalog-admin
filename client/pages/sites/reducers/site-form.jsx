@@ -46,7 +46,6 @@ const reducer = function (state = initialState, action) {
     }
 
     if (action.type === Constants.SAVE_SITE) {
-        console.log("aaaaa". action);
         return ObjectAssign({}, state, {
             loading: true,
             name: action.request.data.name,
@@ -57,9 +56,6 @@ const reducer = function (state = initialState, action) {
     }
 
     if (action.type === Constants.SAVE_SITE_RESPONSE) {
-
-        console.log(action.response);
-
 
         const validation = ParseValidation(action.response);
         const stateUpdates = {
