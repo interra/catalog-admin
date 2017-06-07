@@ -14,9 +14,3 @@ properties:
   description:
     type: string
     title: Description
-  datasets:
-    type: string
-    title: Datasets
-    items:
-      type: string
-      title: Datatset

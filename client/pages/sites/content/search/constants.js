@@ -7,6 +7,8 @@ module.exports = FluxConstant.set([
     'CREATE_NEW_RESPONSE',
     'GET_RESULTS',
     'GET_RESULTS_RESPONSE',
+    'GET_MAP',
+    'GET_MAP_RESPONSE',
     'GET_SITE',
     'GET_SITE_RESPONSE',
     'GET_COLLECTIONS',

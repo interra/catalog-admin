@@ -1,7 +1,7 @@
 'use strict';
 const Constants = require('../constants');
 const ObjectAssign = require('object-assign');
-const ParseValidation = require('../../../../../helpers/parse-validation');
+const ParseValidation = require('../../../../../../helpers/parse-validation');
 
 
 const initialState = {

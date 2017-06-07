@@ -5,6 +5,8 @@ const FluxConstant = require('flux-constant');
 module.exports = FluxConstant.set([
     'DELETE',
     'DELETE_RESPONSE',
+    'DELETE_CONTENT',
+    'DELETE_CONTENT_RESPONSE',
     'GET_COLLECTION_SCHEMA',
     'GET_COLLECTION_SCHEMA_RESPONSE',
     'GET_USER',
@@ -17,6 +19,7 @@ module.exports = FluxConstant.set([
     'GET_DATASETS_RESPONSE',
     'SAVE_DATASET',
     'SAVE_DATASET_RESPONSE',
+    'UPDATE_FORM_DATA',
     'UPDATE_DATASET',
     'UPDATE_DATASET_RESPONSE',
     'HIDE_DATASET_SAVE_SUCCESS'

@@ -118,9 +118,14 @@ class Mongo extends Storage {
 
     titles(type, callback) {
         let query = {};
+
         if (type) {
-            query = {"type": type};
+            query = {
+                "type": type,
+                siteId: this.siteId
+            };
         }
+
         const projection = {'title' : 1, 'identifier': 1, _id: 0};
 
         return MongoModels.find(query, projection, callback);
@@ -152,27 +157,28 @@ class Mongo extends Storage {
         if (typeof(type) === 'undefined') {
             query.type = type;
         }
-        console.log('query', query);
 
         return MongoModels.count(query, callback);
     }
 
-    findOneAndUpdate(identifier, type, content, callback) {
+    findOneByIdentifierAndDelete(identifier, type, callback) {
+
+        const query = { '_id': this.siteId + '-' + type + '-' +  identifier };
+
+        return MongoModels.findOneAndDelete(query, callback);
+    }
+
+    findOneByIdentifierAndUpdate(identifier, type, content, callback) {
 
         const query = { '_id': this.siteId + '-' + type + '-' +  identifier };
         const update = {
             $set: content
         };
 
-        console.log("THE QUERIES", query);
-
         return MongoModels.findOneAndUpdate(query, update, callback);
     }
 
     insertOne(identifier, type, content, callback) {
-
-        console.log("identifier", identifier);
-
 
         if (typeof(content._id) === 'undefined') {
             content._id = this.siteId + '-' + type + '-' +  identifier;

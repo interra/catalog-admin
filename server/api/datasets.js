@@ -162,6 +162,44 @@ internals.applyRoutes = function (server, next) {
         }
     });
 
+    server.route({
+        method: 'POST',
+        path: '/files',
+        config: {
+
+            payload: {
+                output: 'stream',
+                parse: true,
+                allow: 'multipart/form-data'
+            }
+        },
+        handler: function (request, reply) {
+            console.log("THIS IS REALLY HAPPENING", request);
+            var data = request.payload;
+            if (data.file) {
+                var name = data.file.hapi.filename;
+                var path = __dirname + "/uploads/" + name;
+                var file = fs.createWriteStream(path);
+
+                file.on('error', function (err) {
+                    console.error(err)
+                });
+
+                data.file.pipe(file);
+
+                data.file.on('end', function (err) {
+                    var ret = {
+                        filename: data.file.hapi.filename,
+                        headers: data.file.hapi.headers
+                    }
+                    reply(JSON.stringify(ret));
+                })
+            }
+
+        }
+
+    });
+
 
     server.route({
         method: 'POST',
@@ -179,6 +217,8 @@ internals.applyRoutes = function (server, next) {
             }
         },
         handler: function (request, reply) {
+
+            console.log("REQUESTY", request);
 
             const siteId = request.params.siteId;
             const content = request.payload.content;
@@ -254,7 +294,7 @@ internals.applyRoutes = function (server, next) {
 
     server.route({
         method: 'PUT',
-        path: '/sites/{siteId}/datasets/{id}/users',
+        path: '/sites/{siteId}/contents/{id}/users',
         config: {
             auth: {
                 strategy: 'session',
@@ -320,7 +360,7 @@ internals.applyRoutes = function (server, next) {
 
     server.route({
         method: 'DELETE',
-        path: '/sites/siteId/datasets/{id}',
+        path: '/sites/{siteId}/contents/{type}/{id}',
         config: {
             auth: {
                 strategy: 'session',
@@ -329,11 +369,13 @@ internals.applyRoutes = function (server, next) {
         },
         handler: function (request, reply) {
 
-            const query = { '_id': request.params.id };
-            const store = Config.get('/storage');
-            const storage = new Storage['Mongo'](store.FileStorageDir, request.params.siteId);
+            const identifier = request.params.id;
+            const type = request.params.type;
 
-            storage.findOneAndDelete(query, (err, dataset) => {
+            const store = Config.get('/storage');
+            const storage = new Storage['Mongo'](request.params.siteId);
+
+            storage.findOneByIdentifierAndDelete(identifier, type, (err, dataset) => {
 
                 if (err) {
                     return reply(err);

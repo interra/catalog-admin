@@ -17,6 +17,14 @@ properties:
   organization:
     type: string
     title: Organization
+  created:
+    type: string
+    title: Created
+    format: date-time
+  modified:
+    type: string
+    title: Modified
+    format: date-time
   resources:
     type: array
     title: Resources

@@ -9,7 +9,3 @@ datasets:
 organizations:
   description:
     ui:widget: textarea
-  datasets:
-    ui:widget: referenced
-    ui:options:
-      collection: datasets

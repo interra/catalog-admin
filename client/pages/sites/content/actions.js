@@ -7,6 +7,16 @@ const ReactRouter = require('react-router');
 
 class Actions {
 
+    static updateFormData(formData) {
+            console.log("form Data boom", formData);
+
+            Store.dispatch({
+                type: Constants.UPDATE_FORM_DATA,
+                formData
+            });
+
+    }
+
     static getSite(id) {
 
         ApiActions.get(
@@ -89,10 +99,10 @@ class Actions {
         );
     }
 
-    static delete(id) {
+    static deleteContent(siteId, collection, id) {
 
         ApiActions.delete(
-            `/api/sites/${id}`,
+            `/api/sites/${siteId}/contents/${collection}/${id}`,
             undefined,
             Store,
             Constants.DELETE,
@@ -100,7 +110,7 @@ class Actions {
             (err, response) => {
 
                 if (!err) {
-                    ReactRouter.browserHistory.push('/sites');
+                    ReactRouter.browserHistory.push(`/sites/${siteId}/content`);
 
                     window.scrollTo(0, 0);
                 }

@@ -108,6 +108,33 @@ internals.applyRoutes = function (server, next) {
         }
     });
 
+    server.route({
+        method: 'GET',
+        path: '/schemas/{name}/map',
+        config: {
+            auth: {
+                strategy: 'session',
+                scope: ['admin','account']
+            }
+        },
+        handler: function (request, reply) {
+          const schema = new Schema(request.params.name);
+
+          schema.map((err, list) => {
+
+              if (err) {
+                  return reply(Boom.notFound(err));
+              }
+              else if (!list) {
+                return reply([]);
+              }
+
+              reply(list);
+          });
+
+        }
+    });
+
     next();
 };
 

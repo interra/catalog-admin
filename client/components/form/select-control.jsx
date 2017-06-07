@@ -28,6 +28,9 @@ const defaultProps = {
 
 
 class SelectControl extends React.Component {
+    constructor(props) {
+      super(props);
+    }
     value() {
 
         return this.input.value;

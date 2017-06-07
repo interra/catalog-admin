@@ -26,7 +26,7 @@ const Collections = (props) => {
     return <ul className="dropdown-menu">{items}</ul>;
 }
 
-class DatasetSearchPage extends React.Component {
+class ContentSearchPage extends React.Component {
     constructor(props) {
 
         super(props);
@@ -40,7 +40,7 @@ class DatasetSearchPage extends React.Component {
 
     componentWillReceiveProps(nextProps) {
 
-        Actions.getResults(nextProps.location.query);
+        Actions.getResults(this.props.params.id, nextProps.location.query);
     }
 
     componentDidMount() {
@@ -59,6 +59,7 @@ class DatasetSearchPage extends React.Component {
 
         if (this.state.site.hydrated && !this.state.collections.requested) {
             Actions.getCollections(this.state.site.schema);
+            Actions.getMap(this.state.site.schema);
         }
 
     }
@@ -85,8 +86,6 @@ class DatasetSearchPage extends React.Component {
 
 
     render() {
-        let createContent = "/sites/" + this.state.site.slug + "/content/new";
-
         return (
             <section className="container site-admin">
                 <div className="col-sm-2 left">
@@ -107,7 +106,7 @@ class DatasetSearchPage extends React.Component {
                         query={this.props.location.query}
                         onChange={this.onFiltersChange.bind(this)}
                     />
-                    <Results data={this.state.results.data} />
+                  <Results map={this.state.map} data={this.state.results.data} />
                     <Paging
                         ref={(c) => (this.els.paging = c)}
                         pages={this.state.results.pages}
@@ -121,7 +120,7 @@ class DatasetSearchPage extends React.Component {
     }
 }
 
-DatasetSearchPage.propTypes = propTypes;
+ContentSearchPage.propTypes = propTypes;
 
 
-module.exports = DatasetSearchPage;
+module.exports = ContentSearchPage;

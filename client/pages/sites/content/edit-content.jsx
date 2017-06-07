@@ -5,7 +5,7 @@ const ReactRouter = require('react-router');
 const Actions = require('./actions');
 const Store = require('./store');
 const Sidebar = require('../sidebar.jsx');
-const DatasetForm = require('./dataset-form.jsx');
+const ContentForm = require('./content-form.jsx');
 const DeleteForm = require('../../../../client/components/admin/delete-form.jsx');
 
 const Link = ReactRouter.Link;
@@ -41,11 +41,12 @@ class EditSite extends React.Component {
 
         this.setState(Store.getState());
         if (this.state.site.hydrated && !this.state.collectionSchema.requested) {
-            Actions.getCollectionSchema(this.state.site.schema,this.props.params.collection);
+            Actions.getCollectionSchema(this.state.site.schema, this.props.params.collection);
         }
     }
 
     render() {
+        console.log(this.state.content);
 
         return (
             <section className="container site-admin">
@@ -54,16 +55,16 @@ class EditSite extends React.Component {
                 </div>
                 <div className="col-sm-10 center">
                     <h1>Edit {this.state.content.formData.type}</h1>
-                    <DatasetForm user={this.state.user}
+                    <ContentForm user={this.state.user}
                         site={this.state.site}
-                        formData={this.state.formData}
+                        formData={this.state.content.formData}
                         content={this.state.content}
                         schema={this.state.collectionSchema}
                         uiSchema={this.state.collectionSchema.uiSchema}
                         />
                     <DeleteForm
                         {...this.state.delete}
-                        action={Actions.delete.bind(Actions, this.props.params.id)}
+                        action={Actions.deleteContent.bind(Actions, this.props.params.id, this.props.params.collection, this.props.params.contentId)}
                     />
                 </div>
             </section>

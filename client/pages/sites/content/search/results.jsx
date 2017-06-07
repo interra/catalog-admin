@@ -10,12 +10,27 @@ const propTypes = {
 
 
 class Results extends React.Component {
+
     render() {
 
-        const rows = this.props.data.map((record) => {
+        let mapping = this.props.map.data.vcard;
+
+        // Replace keys defined in the schema with those that are required via
+        // map.yml definition.
+        const v = o => Object.assign(...Object.keys(o).map(k => ({ [mapping[k] || k]: o[k] })));
+
+        const rows = this.props.data.map((item) => {
+
+            let record = {};
+            if (mapping) {
+                record = v(item)
+            }
+            else {
+                record = item;
+            }
 
             return (
-                <tr key={record._id}>
+                <tr key={record.identifier}>
                     <td>
                         <Link
                             className="btn btn-default btn-sm"

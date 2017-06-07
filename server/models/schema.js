@@ -11,16 +11,22 @@ const YAML = require('yamljs');
 class Schema {
 
   constructor(name) {
-    this.name = name;
-    this.dir = "./schemas/" + name + "/";
-
+      this.name = name;
+      this.dir = "./schemas/" + name + "/";
   }
 
   uiSchema(callback) {
-    const configFile = this.dir + "UISchema.yml";
-    YAML.load(configFile, function (data) {
-        return callback(null, data);
-    });
+      const configFile = this.dir + "UISchema.yml";
+      YAML.load(configFile, function (data) {
+          return callback(null, data);
+      });
+  }
+
+  map(callback) {
+      const configFile = this.dir + "map.yml";
+      YAML.load(configFile, function (data) {
+          return callback(null, data);
+      });
   }
 
   collectionAndSchema(collection, callback) {
@@ -34,11 +40,14 @@ class Schema {
               if (err) {
                   return callback("UIschema not found");
               }
-              let data = {
-                  schema: list,
-                  uiSchema: ui[collection]
-              }
-              return callback(null,data);
+              this.map((err,map) => {
+                  let data = {
+                      schema: list,
+                      uiSchema: ui[collection],
+                      map: map
+                  }
+                  return callback(null,data);
+              });
 
           });
 

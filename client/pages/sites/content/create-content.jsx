@@ -2,10 +2,10 @@
 const Actions = require('./actions');
 const React = require('react');
 const Store = require('./store');
-const DatasetForm = require('./dataset-form.jsx');
+const ContentForm = require('./content-form.jsx');
 const Sidebar = require('../sidebar.jsx');
 
-class CreateDataset extends React.Component {
+class CreateContent extends React.Component {
     constructor(props) {
 
         super(props);
@@ -24,7 +24,21 @@ class CreateDataset extends React.Component {
           error: undefined,
           hasError: {},
           help: {},
+          formData: {
+              // TODO: These are required fields which we want to make swappable in map.yml.
+              created: new Date(Date.now()).toISOString(),
+              modified: new Date(Date.now()).toISOString(),
+              title: "",
+              identifier: ""
+          }
         }
+        this.state.formData = {
+            // TODO: These are required fields which we want to make swappable in map.yml.
+            created: new Date(Date.now()).toISOString(),
+            modified: new Date(Date.now()).toISOString(),
+            title: "",
+            identifier: ""
+        };
         this.state.collectionSchema.schema = {};
         this.state.collectionSchema.requested = false;
         this.state.collectionSchema.schema.title = '';
@@ -47,8 +61,10 @@ class CreateDataset extends React.Component {
 
         this.setState(Store.getState());
 
+        console.log("store change");
+        console.log(this.state);
         if (this.state.site.hydrated && !this.state.collectionSchema.requested) {
-            Actions.getCollectionSchema(this.state.site.schema,this.props.params.collection);
+            Actions.getCollectionSchema(this.state.site.schema, this.props.params.collection);
         }
 
     }
@@ -62,7 +78,11 @@ class CreateDataset extends React.Component {
               </div>
               <div className="col-sm-10 center">
                   <h1>Create {this.state.collectionSchema.schema.title}</h1>
-                  <DatasetForm user={this.state.user} site={this.state.site} content={this.state.content} schema={this.state.collectionSchema}/>
+                  <ContentForm user={this.state.user}
+                      site={this.state.site}
+                      formData={this.state.formData}
+                      content={this.state.content}
+                      schema={this.state.collectionSchema}/>
               </div>
           </section>
         );
@@ -70,4 +90,4 @@ class CreateDataset extends React.Component {
 }
 
 
-module.exports = CreateDataset;
+module.exports = CreateContent;

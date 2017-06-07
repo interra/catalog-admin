@@ -19,6 +19,18 @@ class Actions {
         );
     }
 
+
+    static getMap(schema) {
+
+        ApiActions.get(
+            `/api/schemas/${schema}/map`,
+            undefined,
+            Store,
+            Constants.GET_MAP,
+            Constants.GET_MAP_RESPONSE
+        );
+    }
+
     static getResults(siteId, data) {
 
         ApiActions.get(

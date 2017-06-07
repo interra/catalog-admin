@@ -1,0 +1,34 @@
+---
+datasets:
+  description:
+    ui:widget: textarea
+  identifier:
+    ui:placeholder: This will be computed from the title if not provided
+  "@type":
+    ui:widget: hidden
+  contactPoint:
+    items:
+      "@type":
+        ui:widget: hidden
+  distribution:
+    items:
+      ui:widget: referenced
+      ui:options:
+        collection: distribution
+distributions:
+  description:
+    ui:widget: textarea
+  identifier:
+    ui:placeholder: This will be computed from the title if not provided
+  "@type":
+    ui:widget: hidden
+  describedBy:
+    ui:widget: hidden
+  describedByType:
+    ui:widget: hidden
+  conformsTo:
+    ui:widget: hidden
+  mediaType:
+    ui:widget: file
+  downloadURL:
+    ui:widget: distUpload
