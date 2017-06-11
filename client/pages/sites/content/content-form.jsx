@@ -46,39 +46,28 @@ class ContentForm extends React.Component {
     componentWillUpdate(nextProps, nextState) {
 
         if (nextProps.schema.requested == true && nextProps.schema.loading == false) {
-            console.log(nextProps.formData);
-            console.log(nextState.formData);
-            nextState.formData.accessURL = undefined;
-            const assign = (target, ...sources) =>
-              Object.assign(target, ...sources.map(x =>
-                Object.entries(x)
-                  .filter(([key, value]) => value !== undefined)
-                  .reduce((obj, [key, value]) => (obj[key] = value, obj), {})
-              ))
 
-            nextState.formData = assign({}, nextProps.formData, nextState.formData);
-            console.log(nextState.formData);
-
+            // Passing formData from children. "There's got to be a better way".
+            for (var key in nextProps.formData) {
+                // Ignore the defaults.
+                if (key !== 'title' && key != 'identifier')
+                nextState.formData[key] = nextProps.formData[key];
+            }
         }
 
 
     }
     onStoreChange() {
-        console.log(this);
 
         this.setState(Store.getState());
 
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log("Next proppoes", nextProps);
+
         // Don't pass the formData until we have a schema.
         if (nextProps.schema.requested == true && nextProps.schema.loading == false) {
-            console.log(this.state);
 
-            //this.state.formData = nextProps.content.formData;
-//            this.state.formData = Object.assign(this.state.formData, nextProps.formData);
-            console.log(this.state);
             this.state.schema = nextProps.schema.schema;
         }
     }
@@ -90,7 +79,6 @@ class ContentForm extends React.Component {
 
         event.preventDefault();
         event.stopPropagation();
-        console.log(data);
 
         if (this.props.content.proc == "new") {
             Actions.saveContent(this.props.site.slug, collection, this.state.formData);

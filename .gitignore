@@ -1,4 +1,5 @@
 node_modules/*
+data_files
 public/*
 test/artifacts/*
 .env

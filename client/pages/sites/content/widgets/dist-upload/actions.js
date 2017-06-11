@@ -7,15 +7,19 @@ const ReactRouter = require('react-router');
 
 class Actions {
 
-    static getTitles(siteId, type) {
+    static submitFile(siteId, file) {
 
-        ApiActions.get(
-            `/api/sites/${siteId}/contents/titles`,
-            {"type": type},
+        let form = new FormData();
+        form.append('file', file, file.name);
+
+        ApiActions.postFile(
+            `/api/${siteId}/files`,
+            form,
             Store,
-            Constants.GET_CONTENT_TITLES,
-            Constants.GET_CONTENT_TITLES_RESPONSE
+            Constants.SAVE_FILE,
+            Constants.SAVE_FILE_RESPONSE
         );
+
     }
 
 

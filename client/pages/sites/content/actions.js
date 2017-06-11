@@ -8,7 +8,6 @@ const ReactRouter = require('react-router');
 class Actions {
 
     static updateFormData(formData) {
-            console.log("form Data boom", formData);
 
             Store.dispatch({
                 type: Constants.UPDATE_FORM_DATA,

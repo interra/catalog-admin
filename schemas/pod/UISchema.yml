@@ -29,6 +29,12 @@ distributions:
   conformsTo:
     ui:widget: hidden
   mediaType:
-    ui:widget: file
+    ui:readonly: true
+  mediaSize:
+    ui:readonly: true
+  accessURL:
+    ui:readonly: true
   downloadURL:
+    ui:readonly: true
+  fileLocation:
     ui:widget: distUpload

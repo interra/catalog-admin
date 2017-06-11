@@ -7,34 +7,35 @@ const ParseValidation = require('../../../../../../helpers/parse-validation');
 const initialState = {
     hydrated: false,
     loading: false,
-    showSaveSuccess: false,
     error: undefined,
-    proc: "edit",
     hasError: {},
-    help: {},
-    titles: []
+    filename: "",
+    url: "",
+    type: ""
 };
+
 const reducer = function (state = initialState, action) {
 
-    if (action.type === Constants.GET_CONTENT_TITLES) {
+    if (action.type === Constants.SAVE_FILE) {
+        console.log("we should be updating state", state);
         return ObjectAssign({}, state, {
             loading: true,
             hydrated: false
         });
     }
 
-    if (action.type === Constants.GET_CONTENT_TITLES_RESPONSE) {
+    if (action.type === Constants.SAVE_FILE_RESPONSE) {
         const validation = ParseValidation(action.response);
-
-        action.response.unshift({"identifier":"none", title: "None"});
+        console.log('we should have a response', action.response)
 
         return ObjectAssign({}, state, {
             loading: false,
             hydrated: true,
             error: validation.error,
             hasError: validation.hasError,
-            help: validation.help,
-            titles: action.response
+            type: action.response.type,
+            url: action.response.url,
+            filename: action.response.filename
         });
     }
 

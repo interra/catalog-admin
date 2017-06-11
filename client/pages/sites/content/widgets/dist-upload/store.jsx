@@ -1,10 +1,11 @@
 'use strict';
-const Titles = require('./reducers/titles');
+const File = require('./reducers/file');
+
 const Redux = require('redux');
 
 
 module.exports = Redux.createStore(
     Redux.combineReducers({
-        titles: Titles
+        file: File
     })
 );

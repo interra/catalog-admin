@@ -30,6 +30,11 @@ const jsonFetch = function (options, callback) {
         config.body = JSON.stringify(options.data);
     }
 
+    if (options.type == 'file') {
+        delete config.headers["Content-Type"];
+        config.body = options.data;
+    }
+
     Xhr(config, (err, response, body) => {
 
         if (err) {

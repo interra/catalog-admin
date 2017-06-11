@@ -23,14 +23,7 @@ class CreateContent extends React.Component {
           showSaveSuccess: false,
           error: undefined,
           hasError: {},
-          help: {},
-          formData: {
-              // TODO: These are required fields which we want to make swappable in map.yml.
-              created: new Date(Date.now()).toISOString(),
-              modified: new Date(Date.now()).toISOString(),
-              title: "",
-              identifier: ""
-          }
+          help: {}
         }
         this.state.formData = {
             // TODO: These are required fields which we want to make swappable in map.yml.
@@ -61,8 +54,6 @@ class CreateContent extends React.Component {
 
         this.setState(Store.getState());
 
-        console.log("store change");
-        console.log(this.state);
         if (this.state.site.hydrated && !this.state.collectionSchema.requested) {
             Actions.getCollectionSchema(this.state.site.schema, this.props.params.collection);
         }

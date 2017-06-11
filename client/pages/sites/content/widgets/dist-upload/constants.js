@@ -3,6 +3,6 @@ const FluxConstant = require('flux-constant');
 
 
 module.exports = FluxConstant.set([
-    'GET_CONTENT_TITLES',
-    'GET_CONTENT_TITLES_RESPONSE'
+    'SAVE_FILE',
+    'SAVE_FILE_RESPONSE'
 ]);
