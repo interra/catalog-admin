@@ -4,6 +4,15 @@ Features will include standard open data catalog capabilties including managing 
 
 Provides an API that can save data in Mongo or JSON files. Plan is to have dataset metadata stored directly in JSON files. However this easy-to-use interface could be used as a front-end for other catalogs. Schema for datasets will be driven by JSON Schema. This will make it easy to adopt new schemas or modify existing schemas.
 
+## Startup
+
+To run locally:
+
+```
+npm start
+npm first-time-setup
+```
+
 ## Table of Contents
 
 - [About Interra Data](#about-interra-data)
