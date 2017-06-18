@@ -3,6 +3,7 @@ const FluxConstant = require('flux-constant');
 
 
 module.exports = FluxConstant.set([
+    'CLEAR_DATA',
     'CREATE_NEW',
     'CREATE_NEW_RESPONSE',
     'GET_RESULTS',

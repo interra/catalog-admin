@@ -7,6 +7,7 @@ const Store = require('./store');
 const Sidebar = require('../sidebar.jsx');
 const ContentForm = require('./content-form.jsx');
 const DeleteForm = require('../../../../client/components/admin/delete-form.jsx');
+const ObjectAssign = require('object-assign');
 
 const Link = ReactRouter.Link;
 
@@ -16,8 +17,8 @@ class EditSite extends React.Component {
 
         Actions.getSite(props.params.id);
         Actions.getUser();
-        Actions.getContent(props.params.id, props.params.collection, props.params.contentId);
         this.state = Store.getState();
+        this.state.formData = {};
         this.state.content.redirect = false;
         this.state.content.proc = "edit";
         this.state.collectionSchema.schema = {};
@@ -26,6 +27,7 @@ class EditSite extends React.Component {
 
     }
     componentDidMount() {
+        console.log("MOUNTED!!!!");
 
         this.unsubscribeStore = Store.subscribe(this.onStoreChange.bind(this));
     }
@@ -33,20 +35,51 @@ class EditSite extends React.Component {
     componentWillUnmount() {
         // Don't show success alert if leaving page.
         this.state.site.showSaveSuccess = false;
-
         this.unsubscribeStore();
     }
 
-    onStoreChange() {
+    onChange(formData) {
 
-        this.setState(Store.getState());
-        if (this.state.site.hydrated && !this.state.collectionSchema.requested) {
-            Actions.getCollectionSchema(this.state.site.schema, this.props.params.collection);
+        this.setState({
+            formData: formData
+        });
+    }
+
+    onStoreChange() {
+        let newState = Store.getState();
+
+        // Order of ops.
+        // 1. site requested
+        // 2. site loading
+        // 3. site hydrated
+        // 4. schema requested
+        // 5. schema loading
+        // 6. schema hydrated
+        // 7. content requested
+        // 8. content loading
+        // 9. content hydrating
+
+        if (newState.site.hydrated && !newState.collectionSchema.hydrated && !newState.collectionSchema.loading) {
+            console.log("REQUESTING SCHEMA");
+            Actions.getCollectionSchema(newState.site.schema, this.props.params.collection);
         }
+        if (newState.collectionSchema.hydrated && !newState.content.hydrated && !newState.content.loading) {
+            console.log("REQUESTING CONTENT");
+            Actions.getContent(this.props.params.id, this.props.params.collection, this.props.params.contentId);
+        }
+        if (newState.content.hydrated && !newState.content.loading && Object.keys(this.state.formData).length === 0) {
+            console.log("ADDING FORM DATA");
+            this.state.formData = newState.content.formData;
+        }
+
+        newState.formData = ObjectAssign({}, this.state.formData, newState.formData);
+        delete newState.formData._id;
+        delete newState.formData["@type"];
+        this.setState(newState);
+
     }
 
     render() {
-        console.log(this.state.content);
 
         return (
             <section className="container site-admin">
@@ -56,8 +89,9 @@ class EditSite extends React.Component {
                 <div className="col-sm-10 center">
                     <h1>Edit {this.state.content.formData.type}</h1>
                     <ContentForm user={this.state.user}
+                        onChange={this.onChange.bind(this)}
                         site={this.state.site}
-                        formData={this.state.content.formData}
+                        formData={this.state.formData}
                         content={this.state.content}
                         schema={this.state.collectionSchema}
                         uiSchema={this.state.collectionSchema.uiSchema}

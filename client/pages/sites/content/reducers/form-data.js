@@ -14,6 +14,10 @@ const initialState = {
 };
 const reducer = function (state = initialState, action) {
 
+    if (action.type === Constants.CLEAR_DATA) {
+        return ObjectAssign({}, initialState);
+    }
+
     if (action.type === Constants.UPDATE_FORM_DATA) {
         return ObjectAssign({}, state.formData, action.formData);
     }

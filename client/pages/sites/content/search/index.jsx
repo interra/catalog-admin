@@ -50,6 +50,8 @@ class ContentSearchPage extends React.Component {
 
     componentWillUnmount() {
 
+        Actions.clearData();
+
         this.unsubscribeStore();
     }
 

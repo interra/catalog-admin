@@ -308,7 +308,7 @@ internals.applyRoutes = function (server, next) {
             const store = Config.get('/storage');
             const storage = new Storage['Mongo'](request.params.siteId);
 
-            storage.findOneAndUpdate(identifier, type, update, (err, content) => {
+            storage.findOneByIdentifierAndUpdate(identifier, type, update, (err, content) => {
 
                 if (err) {
                     return reply(err);

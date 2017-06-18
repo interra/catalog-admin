@@ -33,7 +33,7 @@ const reducer = function (state = initialState, action) {
             hydrated: true,
             error: validation.error,
             hasError: validation.hasError,
-            type: action.response.type,
+            type: action.response.headers["content-type"],
             url: action.response.url,
             filename: action.response.filename
         });

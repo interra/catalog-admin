@@ -12,6 +12,7 @@ const Form = require('react-jsonschema-form').default;
 const Referenced = require('./widgets/referenced/index.jsx');
 const DistUpload = require('./widgets/dist-upload/index.jsx');
 const Store = require('./store');
+const ObjectAssign = require('object-assign');
 
 const propTypes = {
     hydrated: React.PropTypes.bool,
@@ -36,40 +37,20 @@ class ContentForm extends React.Component {
             formData : {
             }
         };
-
-        // This would be a prop once everything is wired.
-        this.state.editedformData = props.formData;
-        this.state.schema = props.schema.schema;
+        console.log(props);
 
     }
 
-    componentWillUpdate(nextProps, nextState) {
-
-        if (nextProps.schema.requested == true && nextProps.schema.loading == false) {
-
-            // Passing formData from children. "There's got to be a better way".
-            for (var key in nextProps.formData) {
-                // Ignore the defaults.
-                if (key !== 'title' && key != 'identifier')
-                nextState.formData[key] = nextProps.formData[key];
-            }
-        }
-
-
-    }
     onStoreChange() {
+        console.log(Store.getState());
 
         this.setState(Store.getState());
 
     }
 
-    componentWillReceiveProps(nextProps) {
-
-        // Don't pass the formData until we have a schema.
-        if (nextProps.schema.requested == true && nextProps.schema.loading == false) {
-
-            this.state.schema = nextProps.schema.schema;
-        }
+    componentWillUnmount() {
+        Actions.clearData();
+        this.unsubscribeStore();
     }
 
     handleSubmit(data) {
@@ -79,18 +60,27 @@ class ContentForm extends React.Component {
 
         event.preventDefault();
         event.stopPropagation();
+        console.log("hanndddling", this.state);
+        console.log(data);
+        console.log(this.props.content.proc);
 
         if (this.props.content.proc == "new") {
-            Actions.saveContent(this.props.site.slug, collection, this.state.formData);
-
+            Actions.saveContent(this.props.site.slug, collection, data.formData);
         }
         else {
-            Actions.updateContent(this.props.site.slug, collection, this.state.formData.identifier, this.state.formData);
+            Actions.updateContent(this.props.site.slug, collection, data.formData.identifier, data.formData);
         }
 
     }
 
     componentDidMount() {
+        console.log("MOUNTED!!!!",this);
+        this.props = {};
+        this.state = {};
+
+        this.unsubscribeStore = Store.subscribe(this.onStoreChange.bind(this));
+
+
         // This is horrible but I am sick of looking at the descriptions and don't want to open up templates yet.
         setTimeout(function () {
           $('[data-toggle="popover"]').popover();
@@ -99,10 +89,7 @@ class ContentForm extends React.Component {
 
     onChange (event) {
 
-        this.setState({
-            formData: event.formData
-        });
-
+        this.props.onChange(event.formData);
     };
 
     render() {
@@ -132,13 +119,12 @@ class ContentForm extends React.Component {
         };
 
         const log = (type) => console.log.bind(console, type);
-        console.log("ultimately the form data", this.state.formData);
 
         return (
 
-          <Form schema={this.state.schema}
+          <Form schema={this.props.schema.schema}
             uiSchema={this.props.schema.uiSchema}
-            formData={this.state.formData}
+            formData={this.props.formData}
             onChange={this.onChange.bind(this)}
             widgets={widgets}
             fields={fields}

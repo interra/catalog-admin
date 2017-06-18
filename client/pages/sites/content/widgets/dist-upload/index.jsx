@@ -22,12 +22,19 @@ class DistUpload extends React.Component {
         super(props);
 
         this.state = Store.getState();
-        console.log(this.props);
+
+        this.state.item = {};
+        this.state.item.type = 'upload';
+        this.state.item.source = '';
+
     }
 
     removeFile(event) {
         let state = Store.getState();
-        state.file.filename = ""
+        state.file.filename = "";
+        state.file.url = "";
+        this.state.item.type = "";
+        this.state.item.source = "";
 
         this.setState(state);
 
@@ -35,8 +42,8 @@ class DistUpload extends React.Component {
         Actions.updateFormData({
             mediaType: '',
             mediaSize: '',
-            downloadURL: '',
-            format: ''
+            downloadURL: undefined,
+            format: undefined
         });
 
     }
@@ -49,31 +56,36 @@ class DistUpload extends React.Component {
         DistActions.submitFile(siteId, file);
 
         let format = this.humanReadableFormat(file.type);
-        console.log(format);
+
         Actions.updateFormData({
             mediaType: file.type,
             mediaSize: file.size,
             format: format
         });
+//        this.props.onChange({value:});
+
+    }
+
+    splitValue(nextState, nextProps) {
+        // Because of the constraints of using the json-schema as a data stoe,
+        // specifically that you can't overwrite an object or array, just a
+        // single field, we want to store both the value and the tab/type in "value".
+        nextState.value = nextProps.value;
+        nextState.item = {};
+        if (nextProps.value != undefined) {
+            nextState.item.type = nextState.value.split('[]')[0];
+            nextState.item.source = nextState.value.split('[]')[1];
+            if (nextState.item.type == "upload") {
+                nextState.file.filename = nextState.item.source;
+                nextState.file.type = nextState.value.split('[]')[2];
+            }
+        }
+        return nextState;
 
     }
 
     onFilesError(error, file) {
         console.log('error code ' + error.code + ': ' + error.message)
-    }
-
-    resetState(key, value) {
-        let state = {
-            distUpload: {
-                upload: "",
-                api: "",
-                remote: ""
-            },
-            files: this.state.files
-        }
-        state.distUpload[key] = value
-        return state;
-
     }
 
     componentDidMount() {
@@ -93,32 +105,48 @@ class DistUpload extends React.Component {
     }
 
     componentWillUpdate(nextProps, nextState) {
-        console.log("nextState", nextState);
-        if (nextState.file.url) {
-            Actions.updateFormData({
-                downloadURL: nextState.file.url
-            });
+
+        console.log(nextProps);
+        if (nextState.value == undefined && nextProps.value != undefined) {
+            nextState = this.splitValue(nextState, nextProps);
         }
 
+        if (nextState.file.url && nextState.item.source == "") {
+            Actions.updateFormData({
+                downloadURL: nextState.file.url,
+                accessURL: undefined,
+                fileLocation:  "upload[]" + nextState.file.filename + "[]" + nextState.file.type
+
+            });
+            nextState.item.source = nextState.item.filename;
+            nextState.item.type = 'upload';
+        }
     }
 
     onChange(event) {
 
+        this.setState({
+            value: event.target.name + '[]' + event.target.value,
+            item: {
+                type: event.target.name,
+                source: event.target.value
+            }
+        });
 
-        //const newState = this.resetState(event.target.name, event.target.value);
+        if (event.target.name == 'api') {
+            Actions.updateFormData({accessURL: event.target.value});
 
+        }
+        else if (event.target.name == 'remote') {
+            Actions.updateFormData({downloadURL: event.target.value});
+        }
 
-        //this.setState(newState);
-//        Actions.updateFormData({accessURL: event.target.value});
-//        Actions.getContent("test-this-make-it-work");
-
-//        this.props.onChange(value: event.target.value);
-//        this.setState({});
+        this.props.onChange(event.target.name + "[]" + event.target.value);
 
     }
 
     humanReadableFormat(type) {
-        let format = "";
+        let format = undefined;
         switch (type) {
             case 'image/gif':
                 format = 'gif';
@@ -157,7 +185,7 @@ class DistUpload extends React.Component {
                 format = 'zip';
                 break;
         }
-        console.log(format);
+
         return format;
 
     }
@@ -167,6 +195,7 @@ class DistUpload extends React.Component {
         switch (type) {
             case 'image/gif':
             case 'image/bmp':
+            case 'image/jpg':
             case 'image/jpeg':
             case 'meda/png':
                 icon = <i className="fa fa-image"></i>;
@@ -200,6 +229,7 @@ class DistUpload extends React.Component {
 
     fileView() {
         console.log(this.state);
+
         if (this.state.file.loading == true && this.state.file.hydrated == false) {
             return(
                 <div className="file-handler">
@@ -224,7 +254,7 @@ class DistUpload extends React.Component {
         else {
             return(
                 <div className="file-handler">
-                    <input type="file" name="file" onChange={this.onFilesChange.bind(this)}/>
+                    <input type="file" disabled={ this.state.item.type != "upload" && this.state.item.source != "" ? "readOnly" : null } name="file" onChange={this.onFilesChange.bind(this)}/>
                 </div>
 
             );
@@ -232,36 +262,27 @@ class DistUpload extends React.Component {
     }
 
     render() {
-        console.log("props", this.props);
-        console.log("State", this.state);
 
         return (
             <div className="dist-upload-row">
                 <ul className="nav nav-tabs" role="tablist" id="dist-upload-tabs">
-                    <li role="presentation" className="active"><a href="#upload" aria-controls="upload" role="tab" data-toggle="tab">File Upload</a></li>
-                    <li role="presentation"><a href="#api" aria-controls="api" role="tab" data-toggle="tab">API or Website</a></li>
-                    <li role="presentation"><a href="#remote" aria-controls="remote" role="tab" data-toggle="tab">Remote File</a></li>
+                    <li role="presentation"  className={this.state.item.type == "upload" ? "active" : null}><a href="#upload" aria-controls="upload" role="tab" data-toggle="tab">File Upload</a></li>
+                    <li role="presentation" className={this.state.item.type == "api" ? "active" : null}><a href="#api" aria-controls="api" role="tab" data-toggle="tab">API or Website</a></li>
+                    <li role="presentation" className={this.state.item.type == "remote" ? "active" : null}><a href="#remote" aria-controls="remote" role="tab" data-toggle="tab">Remote File</a></li>
                 </ul>
 
                 <div className="tab-content">
-                    <div role="tabpanel" className="tab-pane active" id="upload">
+                    <div role="tabpanel" className={this.state.item.type == "upload" ? "active tab-pane" : "tab-pane"} id="upload">
                         <br />
                         {this.fileView()}
                     </div>
-                    <div role="tabpanel" className="tab-pane" id="api">
+                    <div role="tabpanel" className={this.state.item.type == "api" ? "active tab-pane" : "tab-pane"} id="api">
                         <br />
-                            { this.state.file.filename ?
-                                <span>
-                                <input name="api" readOnly onChange={this.onChange.bind(this)} type="text" className="form-control" placeholder="http://example.com/api"></input>
-                                <span className="form-description">Can't include API or Website if file is uploaded.</span>
-                                </span>
-                                :
-                                <input name="api" onChange={this.onChange.bind(this)} type="text" className="form-control" placeholder="http://example.com/api"></input>
-                            }
+                            <input name="api" readOnly={ this.state.item.type != "api" && this.state.item.source != "" ? "readOnly" : null } onChange={this.onChange.bind(this)} type="text" className="form-control" placeholder="http://example.com/api"></input>
                     </div>
-                    <div role="tabpanel" className="tab-pane" id="remote">
+                    <div role="tabpanel" className={this.state.item.type == "remote" ? "active tab-pane" : "tab-pane"} id="remote">
                         <br />
-                            <input name="remote"  onChange={this.onChange.bind(this)} type="text" className="form-control" placeholder="http://example.com/filename.csv"></input>
+                            <input name="remote" readOnly={ this.state.item.type != "remote" && this.state.item.source != "" ? "readOnly" : null } value={this.state.item.type == "remote" ? this.state.item.source : ""} onChange={this.onChange.bind(this)} type="text" className="form-control" placeholder="http://example.com/filename.csv"></input>
 
                     </div>
                 </div>

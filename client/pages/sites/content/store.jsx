@@ -1,6 +1,6 @@
 'use strict';
 const Contents = require('./reducers/datasets');
-const Content = require('./reducers/dataset');
+const Content = require('./reducers/content');
 const User = require('../reducers/user');
 const Delete = require('../reducers/delete');
 const Site = require('../reducers/site-form');

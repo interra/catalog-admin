@@ -8,6 +8,14 @@ const Store = require('./store');
 
 class Actions {
 
+    static clearData() {
+
+        Store.dispatch({
+            type: Constants.CLEAR_DATA
+        });
+
+    }    
+
     static getSite(id) {
 
         ApiActions.get(

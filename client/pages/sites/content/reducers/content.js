@@ -16,6 +16,12 @@ const initialState = {
 };
 const reducer = function (state = initialState, action) {
 
+
+    if (action.type === Constants.CLEAR_DATA) {
+        return ObjectAssign({}, initialState);
+    }
+
+
     if (action.type === Constants.GET_CONTENT) {
         return ObjectAssign({}, state, {
             loading: true,

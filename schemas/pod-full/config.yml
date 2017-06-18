@@ -1,0 +1,7 @@
+name: Project Open Data Full Specification
+collections:
+  - datasets
+  - organizations
+  - distributions
+  - keywords
+  - licenses

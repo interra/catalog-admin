@@ -29,7 +29,6 @@ properties:
     title: Format
     description: A human-readable description of the file format of a distribution
     type: string
-    minLength: 1
     enum:
       - csv
       - xls
@@ -47,7 +46,7 @@ properties:
   mediaSize:
     title: Media Size
     description: "The size of the meida file."
-    type: string
+    type: integer
   downloadURL:
     title: Download URL
     description: URL providing direct access to a downloadable file of a dataset
@@ -73,3 +72,8 @@ properties:
     description: The machine-readable file format (IANA Media Type or MIME Type) of the distribution’s describedBy URL
     pattern: "^[-\\w]+/[-\\w]+(\\.[-\\w]+)*([+][-\\w]+)?$"
     type: string
+  isssued:
+    title: "Release Date"
+    description: "Date of formal issuance."
+    type: string
+    pattern: "^([\\+-]?\\d{4}(?!\\d{2}\\b))((-?)((0[1-9]|1[0-2])(\\3([12]\\d|0[1-9]|3[01]))?|W([0-4]\\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\\d|[12]\\d{2}|3([0-5]\\d|6[1-6])))([T\\s]((([01]\\d|2[0-3])((:?)[0-5]\\d)?|24\\:?00)([\\.,]\\d+(?!:))?)?(\\17[0-5]\\d([\\.,]\\d+)?)?([zZ]|([\\+-])([01]\\d|2[0-3]):?([0-5]\\d)?)?)?)?$"

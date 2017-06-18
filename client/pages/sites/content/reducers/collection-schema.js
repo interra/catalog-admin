@@ -13,6 +13,10 @@ const initialState = {
 };
 const reducer = function (state = initialState, action) {
 
+    if (action.type === Constants.CLEAR_DATA) {
+        return initialState;
+    }
+
     if (action.type === Constants.GET_COLLECTION_SCHEMA) {
         return ObjectAssign({}, state, {
             hydrated: false,

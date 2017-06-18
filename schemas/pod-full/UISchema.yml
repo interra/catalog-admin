@@ -14,7 +14,45 @@ datasets:
     items:
       ui:widget: referenced
       ui:options:
-        collection: distribution
+        collection: distributions
+  theme:
+    items:
+      ui:widget: referenced
+      ui:options:
+        collection: keywords
+  license:
+    ui:widget: referenced
+    ui:options:
+      collection: licenses
+  ui:order:
+    - @type
+    - title
+    - identifier
+    - description
+    - distribution
+    - keyword
+    - theme
+    - accessLevel
+    - rights
+    - accrualPeriodicity
+    - bureauCode
+    - describedBy
+    - describedByType
+    - conformsTo
+    - dataQuality
+    - contactPoint
+    - landingPage
+    - language
+    - primaryITInvestmentUII
+    - programCode
+    - publisher
+    - references
+    - spatial
+    - systemOfRecords
+    - temporal
+    - license
+    - isPartOf
+    - issued
 distributions:
   description:
     ui:widget: textarea
@@ -38,3 +76,6 @@ distributions:
     ui:readonly: true
   fileLocation:
     ui:widget: distUpload
+organizations:
+  @type:
+    ui:widget: hidden

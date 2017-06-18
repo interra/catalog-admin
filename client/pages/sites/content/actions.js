@@ -7,12 +7,20 @@ const ReactRouter = require('react-router');
 
 class Actions {
 
+    static clearData() {
+
+        Store.dispatch({
+            type: Constants.CLEAR_DATA
+        });
+
+    }
+
     static updateFormData(formData) {
 
-            Store.dispatch({
-                type: Constants.UPDATE_FORM_DATA,
-                formData
-            });
+        Store.dispatch({
+            type: Constants.UPDATE_FORM_DATA,
+            formData
+        });
 
     }
 
@@ -56,6 +64,8 @@ class Actions {
             "collection": collection,
             "content": data
         }
+
+        console.log("DATA DATA DATA!", data);
 
         ApiActions.post(
             `/api/sites/${siteId}/contents`,
