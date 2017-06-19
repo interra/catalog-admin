@@ -17,6 +17,7 @@ const initialState = {
 const reducer = function (state = initialState, action) {
 
     if (action.type === Constants.SAVE_FILE) {
+
         return ObjectAssign({}, state, {
             loading: true,
             hydrated: false

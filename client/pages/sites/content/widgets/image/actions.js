@@ -19,9 +19,7 @@ class Actions {
             Constants.SAVE_FILE,
             Constants.SAVE_FILE_RESPONSE
         );
-
     }
-
 
 }
 

@@ -165,75 +165,6 @@ internals.applyRoutes = function (server, next) {
 
     server.route({
         method: 'POST',
-        path: '/{siteId}/files',
-        config: {
-            auth: {
-                strategy: 'session',
-                scope: ['admin','site-{params.siteId}']
-            },
-            payload: {
-                output: 'stream',
-                parse: true,
-                maxBytes: 1001001000,
-                allow: 'multipart/form-data'
-            }
-        },
-        handler: function (request, reply) {
-            var data = request.payload;
-
-            // TODO: Move this to a model.
-            if (data.file) {
-                const store = Config.get('/storage');
-                const url = Config.get('/baseUrl');
-
-                var directory = __dirname.replace("server/api","") + store.FileStorageDir + '/' + request.params.siteId + '/files'
-                var name = data.file.hapi.filename;
-                var path = directory + '/' + name;
-                console.log(path);
-                fs.ensureDir(directory, err => {
-                    if (err) {
-                        reply(Boom.badImplemenation("Unable to write file"));
-                    }
-                    fs.pathExists(path, (err, exists) => {
-                        console.log("erroror here?", err);
-                        console.log('exists here', exists);
-                        if (exists) {
-                            name = name.split('.')[0] + '_' + Math.floor(Math.random() * (100000 - 1)) + 1 + '.' + name.split('.')[1];
-                            path = directory + '/' + name;
-                        }
-
-                        var file = fs.createWriteStream(path);
-
-                        file.on('error', function (err) {
-                            console.error("this is an error", err)
-                        });
-
-                        data.file.pipe(file);
-
-                        data.file.on('end', function (err) {
-                            var ret = {
-                                filename: name,
-                                url: url + '/files/' + name,
-                                headers: data.file.hapi.headers
-                            }
-                            reply(JSON.stringify(ret));
-                        })
-
-                    });
-
-                })
-
-            }
-            else {
-                reply(Boom.badRequest('file not included'));
-            }
-        }
-
-    });
-
-
-    server.route({
-        method: 'POST',
         path: '/sites/{siteId}/contents',
         config: {
             auth: {
@@ -248,8 +179,6 @@ internals.applyRoutes = function (server, next) {
             }
         },
         handler: function (request, reply) {
-
-            console.log("REQUESTY", request);
 
             const siteId = request.params.siteId;
             const content = request.payload.content;

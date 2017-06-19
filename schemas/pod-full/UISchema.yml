@@ -79,3 +79,5 @@ distributions:
 organizations:
   @type:
     ui:widget: hidden
+  image:
+    ui:widget: image

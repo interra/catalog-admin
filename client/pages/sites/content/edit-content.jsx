@@ -27,7 +27,6 @@ class EditSite extends React.Component {
 
     }
     componentDidMount() {
-        console.log("MOUNTED!!!!");
 
         this.unsubscribeStore = Store.subscribe(this.onStoreChange.bind(this));
     }
@@ -48,33 +47,17 @@ class EditSite extends React.Component {
     onStoreChange() {
         let newState = Store.getState();
 
-        // Order of ops.
-        // 1. site requested
-        // 2. site loading
-        // 3. site hydrated
-        // 4. schema requested
-        // 5. schema loading
-        // 6. schema hydrated
-        // 7. content requested
-        // 8. content loading
-        // 9. content hydrating
-
         if (newState.site.hydrated && !newState.collectionSchema.hydrated && !newState.collectionSchema.loading) {
-            console.log("REQUESTING SCHEMA");
             Actions.getCollectionSchema(newState.site.schema, this.props.params.collection);
         }
         if (newState.collectionSchema.hydrated && !newState.content.hydrated && !newState.content.loading) {
-            console.log("REQUESTING CONTENT");
             Actions.getContent(this.props.params.id, this.props.params.collection, this.props.params.contentId);
         }
         if (newState.content.hydrated && !newState.content.loading && Object.keys(this.state.formData).length === 0) {
-            console.log("ADDING FORM DATA");
             this.state.formData = newState.content.formData;
         }
 
         newState.formData = ObjectAssign({}, this.state.formData, newState.formData);
-        delete newState.formData._id;
-        delete newState.formData["@type"];
         this.setState(newState);
 
     }

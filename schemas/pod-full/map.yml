@@ -1,5 +1,5 @@
 ---
-vcard:
-  fn: title
+organizations:
+  name: title
 datasets:
   created: issued

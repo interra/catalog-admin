@@ -65,8 +65,6 @@ class Actions {
             "content": data
         }
 
-        console.log("DATA DATA DATA!", data);
-
         ApiActions.post(
             `/api/sites/${siteId}/contents`,
             post,

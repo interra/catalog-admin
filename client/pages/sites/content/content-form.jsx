@@ -11,6 +11,7 @@ const Navigatable = require('react-router-component').NavigatableMixin
 const Form = require('react-jsonschema-form').default;
 const Referenced = require('./widgets/referenced/index.jsx');
 const DistUpload = require('./widgets/dist-upload/index.jsx');
+const Image = require('./widgets/image/index.jsx');
 const Store = require('./store');
 const ObjectAssign = require('object-assign');
 
@@ -37,12 +38,10 @@ class ContentForm extends React.Component {
             formData : {
             }
         };
-        console.log(props);
 
     }
 
     onStoreChange() {
-        console.log(Store.getState());
 
         this.setState(Store.getState());
 
@@ -60,9 +59,6 @@ class ContentForm extends React.Component {
 
         event.preventDefault();
         event.stopPropagation();
-        console.log("hanndddling", this.state);
-        console.log(data);
-        console.log(this.props.content.proc);
 
         if (this.props.content.proc == "new") {
             Actions.saveContent(this.props.site.slug, collection, data.formData);
@@ -74,12 +70,10 @@ class ContentForm extends React.Component {
     }
 
     componentDidMount() {
-        console.log("MOUNTED!!!!",this);
         this.props = {};
         this.state = {};
 
         this.unsubscribeStore = Store.subscribe(this.onStoreChange.bind(this));
-
 
         // This is horrible but I am sick of looking at the descriptions and don't want to open up templates yet.
         setTimeout(function () {
@@ -96,6 +90,7 @@ class ContentForm extends React.Component {
 
         const widgets = {
             referenced: Referenced,
+            image: Image,
             distUpload: DistUpload
         };
 

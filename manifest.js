@@ -120,7 +120,13 @@ const manifest = {
             }
         },
         {
-            plugin: './server/api/datasets',
+            plugin: './server/api/contents',
+            options: {
+                routes: { prefix: '/api' }
+            }
+        },
+        {
+            plugin: './server/api/files',
             options: {
                 routes: { prefix: '/api' }
             }

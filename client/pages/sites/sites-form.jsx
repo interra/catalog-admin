@@ -170,7 +170,7 @@ class SitesForm extends React.Component {
                         disabled={this.props.loading}>
 
                         <option value="simple">Simple</option>
-                        <option value="pod">Project Open Data</option>
+                        <option value="pod-full">Project Open Data - Full</option>
                         <option value="datapackages">Data Packages</option>
                     </SelectControl>
                     <SelectControl

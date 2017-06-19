@@ -106,7 +106,6 @@ class DistUpload extends React.Component {
 
     componentWillUpdate(nextProps, nextState) {
 
-        console.log(nextProps);
         if (nextState.value == undefined && nextProps.value != undefined) {
             nextState = this.splitValue(nextState, nextProps);
         }
@@ -228,7 +227,6 @@ class DistUpload extends React.Component {
     }
 
     fileView() {
-        console.log(this.state);
 
         if (this.state.file.loading == true && this.state.file.hydrated == false) {
             return(

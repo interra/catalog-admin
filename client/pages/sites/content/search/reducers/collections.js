@@ -13,7 +13,6 @@ const initialState = {
 const reducer = function (state = initialState, action) {
 
     if (action.type === Constants.CLEAR_DATA) {
-        console.log("CLEARING STATE!", initialState);
         return initialState;
     }
 
